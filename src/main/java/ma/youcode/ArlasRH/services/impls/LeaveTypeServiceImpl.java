@@ -3,10 +3,12 @@ package ma.youcode.ArlasRH.services.impls;
 import ma.youcode.ArlasRH.daos.LeaveTypeRepository;
 import ma.youcode.ArlasRH.models.LeaveType;
 import ma.youcode.ArlasRH.services.LeaveTypeService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class LeaveTypeServiceImpl  implements LeaveTypeService {
     private final LeaveTypeRepository leaveTypeRepository;
 

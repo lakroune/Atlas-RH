@@ -4,10 +4,11 @@ import ma.youcode.ArlasRH.daos.LeaveRequestRepository;
 import ma.youcode.ArlasRH.models.LeaveRequest;
 import ma.youcode.ArlasRH.models.enums.LeaveStatus;
 import ma.youcode.ArlasRH.services.LeaveRequestService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class LeaveRequestServiceImpl implements LeaveRequestService {
     private final LeaveRequestRepository leaveRequestRepository;
 

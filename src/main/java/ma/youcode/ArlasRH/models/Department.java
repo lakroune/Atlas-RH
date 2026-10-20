@@ -1,5 +1,6 @@
 package ma.youcode.ArlasRH.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class Department {
     private String description;
 
     @OneToMany(mappedBy = "departement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Employee> employees;
 
     public Department() {
