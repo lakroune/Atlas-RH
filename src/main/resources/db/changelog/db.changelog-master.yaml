@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0-initial
+      author: system
+      changes: []
