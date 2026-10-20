@@ -37,14 +37,18 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department departement;
 
-
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LeaveRequest> leaveRequest;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Contract contract;
 
-    @
+    @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Employee> employees;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
 
     public Employee() {
     }

@@ -5,7 +5,7 @@ import ma.youcode.ArlasRH.models.LeaveType;
 import java.util.List;
 import java.util.Optional;
 
-public interface CLeaveTypeService {
+public interface LeaveTypeService {
     /**
      *
      * @param leaveType
