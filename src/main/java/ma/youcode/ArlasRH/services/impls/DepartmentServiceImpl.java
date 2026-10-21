@@ -19,7 +19,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department createDepartement(Department department) {
-        return departmentRepository.save(department); // Correction ici (minuscule)
+        if (departmentRepository.existsByName(department.getName()))
+            throw new RuntimeException("The department name already exists.");
+        return departmentRepository.save(department);
     }
 
     @Override
@@ -34,24 +36,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department updateDepartement(Long id, Department updatedDepartment) {
-        Optional<Department> departmentOptional = this.getDepartementById(id);
-        if (departmentOptional.isPresent()) {
-            Department existingDepartment = departmentOptional.get();
-            existingDepartment.setName(updatedDepartment.getName());
-            existingDepartment.setDescription(updatedDepartment.getDescription());
-            existingDepartment.setEmployees(updatedDepartment.getEmployees());
-
-            return departmentRepository.save(existingDepartment); // Correction ici (passer l'entité et retourner)
-        } else {
-            throw new RuntimeException("Département non trouvé avec l'id : " + id);
-        }
+        return new Department();
     }
 
     @Override
     public void deleteDepartement(Long id) {
-        if (!departmentRepository.existsById(id)) {
-            throw new RuntimeException("Département non trouvé avec l'id : " + id);
+        if (departmentRepository.existsById(id)) {
+            departmentRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("the department not found");
         }
-        departmentRepository.deleteById(id);
+
     }
 }
