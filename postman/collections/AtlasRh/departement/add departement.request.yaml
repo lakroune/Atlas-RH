@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{pathUrl}}/departments"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"departement 19\",\r
+
+    \    \"description\": \"Département responsable \"\r
+
+    }"
+order: 1000

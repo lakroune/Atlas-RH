@@ -21,7 +21,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee createEmployee(Employee employee) {
-        return null;
+        if (employeeRepository.existsByMatricule(employee.getMatricule())) {
+            throw new RuntimeException("Employee already exists");
+        }
+
+        if (employeeRepository.existsByEmail(employee.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        return employeeRepository.save(employee);
+
     }
 
     @Override
@@ -36,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllEmployees() {
-        return List.of();
+        return employeeRepository.findAll();
     }
 
     @Override

@@ -1,0 +1,30 @@
+$kind: http-request
+name: get all employes
+url: "{{pathUrl}}/employes"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"matricule\": \"EMP003\",\r
+
+    \  \"firstName\": \"Ismail\",\r
+
+    \  \"lastName\": \"Lakroune\",\r
+
+    \  \"email\": \"ismail.lakroune1@example.com\",\r
+
+    \  \"position\": \"Développeur Full Stack\",\r
+
+    \  \"dateDeRejoindre\": \"2026-10-21\",\r
+
+    \  \"role\": \"EMPLOYE\",\r
+
+    \  \"departement\": {\r
+
+    \    \"id\": 5\r
+
+    \  }\r
+
+    }"
+order: 1905

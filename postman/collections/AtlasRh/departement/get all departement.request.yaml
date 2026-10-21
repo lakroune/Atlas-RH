@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/api/v1/departments
+method: GET
+order: 4000

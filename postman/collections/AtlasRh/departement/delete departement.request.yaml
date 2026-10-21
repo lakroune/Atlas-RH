@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{pathUrl}}/departments/7"
+method: DELETE
+order: 2058

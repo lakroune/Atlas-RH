@@ -17,6 +17,7 @@ public class DepartmentController {
 
 
     public DepartmentController(DepartmentService departmentService) {
+
         this.departmentService = departmentService;
     }
 
