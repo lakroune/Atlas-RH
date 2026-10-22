@@ -36,8 +36,6 @@ public class EmployeeRequest {
     @NotNull(message = "Role is vide")
     private Role role;
 
-    @NotNull(message = "Department id  absant")
-    private Long departmentId;
 
     public EmployeeRequest() {
     }
@@ -98,11 +96,4 @@ public class EmployeeRequest {
         this.role = role;
     }
 
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
 }

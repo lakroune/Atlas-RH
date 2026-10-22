@@ -35,16 +35,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> createEmployee(
+    public EmployeeResponse createEmployee(
             @PathVariable Long idD,
             @Valid @RequestBody EmployeeRequest request) {
 
         Employee employee = employeeMapper.toEntity(request);
 
-        EmployeeResponse response =
-                employeeService.createEmployee(idD, employee);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return employeeService.createEmployee(idD, employee);
     }
 
     @GetMapping("/{idE}")

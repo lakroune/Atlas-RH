@@ -1,4 +1,4 @@
 $kind: http-request
-url: "{{pathUrl}}/employes"
+url: "{{pathUrl}}/departments/5/employes"
 method: GET
 order: 2455
