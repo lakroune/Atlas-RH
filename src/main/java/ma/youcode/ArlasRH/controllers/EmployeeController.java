@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/employes")
@@ -36,4 +37,16 @@ public class EmployeeController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getEmploye(@PathVariable Long id) {
+
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+        if (employee.isPresent())
+            return new ResponseEntity<Employee>(employee.get(), HttpStatus.OK);
+        else
+            return new ResponseEntity<String>(" employe not exist", HttpStatus.NOT_FOUND);
+    }
+
+
 }
