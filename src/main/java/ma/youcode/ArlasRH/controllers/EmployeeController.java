@@ -1,57 +1,65 @@
+
 package ma.youcode.ArlasRH.controllers;
 
-
+import ma.youcode.ArlasRH.dtos.EmployeeRequest;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.mappers.EmployeeMapper;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.EmployeeService;
-import org.springframework.http.HttpEntity;
+
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/employes")
+@RequestMapping("/api/v1/departments/{idD}/employes")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
 
-    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
+    public EmployeeController(
+            EmployeeService employeeService,
+            EmployeeMapper employeeMapper) {
         this.employeeService = employeeService;
         this.employeeMapper = employeeMapper;
     }
 
-
     @GetMapping
-    public List<EmployeeResponse> getAllEmployes() {
-        List<EmployeeResponse> employees = employeeService.getAllEmployees();
-        return employees;
+    public List<EmployeeResponse> getAllEmployes(
+            @PathVariable Long idD) {
+        return employeeService.getEmployeesByDepartmentId(idD);
     }
-
 
     @PostMapping
-    public EmployeeResponse createEmployee(@RequestBody Employee employee) {
-        return employeeService.createEmployee(employee);
+    public ResponseEntity<EmployeeResponse> createEmployee(
+            @PathVariable Long idD,
+            @Valid @RequestBody EmployeeRequest request) {
+
+        Employee employee = employeeMapper.toEntity(request);
+
+        EmployeeResponse response =
+                employeeService.createEmployee(idD, employee);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("{id}")
-    public EmployeeResponse getEmployeeById(@PathVariable Long id) {
-        return employeeService.getEmployeeById(id);
+    @GetMapping("/{idE}")
+    public EmployeeResponse getEmployeeById(
+            @PathVariable Long idD,
+            @PathVariable Long idE) {
+        return employeeService.getEmployeeById(idD, idE);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
-        try {
-            employeeService.deleteEmployee(id);
-            return new ResponseEntity<String>("Employees have been deleted successfully.", HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+    @DeleteMapping("/{idE}")
+    public ResponseEntity<Void> deleteEmployee(
+            @PathVariable Long idD,
+            @PathVariable Long idE) {
 
-        }
+        employeeService.deleteEmployee(idD, idE);
+        return ResponseEntity.noContent().build();
     }
-
 }

@@ -7,55 +7,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeService {
-    /**
-     *
-     * @param employee
-     * @return
-     */
-    EmployeeResponse createEmployee(Employee employee);
 
-    /**
-     *
-     * @param id
-     * @param employee
-     * @return
-     */
+    EmployeeResponse createEmployee(Long idDepartment, Employee employee);
+
     EmployeeResponse updateEmployee(Long id, Employee employee);
 
-    /**
-     *
-     * @param id
-     * @return
-     */
-    EmployeeResponse getEmployeeById(Long id);
+    EmployeeResponse getEmployeeById(Long idDepartment, Long idEmployee);
 
-    /**
-     *
-     * @return
-     */
     List<EmployeeResponse> getAllEmployees();
 
-    /**
-     *
-     * @param keyword
-     * @param pageable
-     * @return
-     */
-    Page<EmployeeResponse> getEmployeesWithPaginationAndSearch(String keyword, Pageable pageable);
-
-    /**
-     *
-     * @param managerId
-     * @return
-     */
     List<EmployeeResponse> getTeamByManagerId(Long managerId);
 
-    /**
-     *
-     * @param id
-     */
-    void deleteEmployee(Long id);
+    void deleteEmployee(Long idDepartment, Long idEmployee);
+
+    List<EmployeeResponse> getEmployeesByDepartmentId(Long idDepartment);
 }
