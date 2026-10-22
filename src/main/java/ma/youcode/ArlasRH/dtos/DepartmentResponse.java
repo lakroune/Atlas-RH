@@ -1,4 +1,8 @@
 package ma.youcode.ArlasRH.dtos;
 
-public class DepartmentResponse {
-}
+public record DepartmentResponse (
+
+    Long id,
+    String name,
+    String description
+){}

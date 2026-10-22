@@ -1,6 +1,7 @@
+
 package ma.youcode.ArlasRH.services;
 
-
+import ma.youcode.ArlasRH.dtos.DepartmentResponse;
 import ma.youcode.ArlasRH.models.Department;
 
 import java.util.List;
@@ -12,20 +13,20 @@ public interface DepartmentService {
      * @param department
      * @return
      */
-    Department createDepartement(Department department);
+    DepartmentResponse createDepartement(Department department);
 
     /**
      *
      * @return
      */
-    List<Department> getAllDepartements();
+    List<DepartmentResponse> getAllDepartements();
 
     /**
      *
      * @param id
      * @return
      */
-    Optional<Department> getDepartementById(Long id);
+    DepartmentResponse getDepartementById(Long id);
 
     /**
      *
@@ -33,7 +34,7 @@ public interface DepartmentService {
      * @param updatedDepartment
      * @return
      */
-    Department updateDepartement(Long id, Department updatedDepartment);
+    DepartmentResponse updateDepartement(Long id, Department updatedDepartment);
 
     /**
      *
@@ -41,4 +42,3 @@ public interface DepartmentService {
      */
     void deleteDepartement(Long id);
 }
-

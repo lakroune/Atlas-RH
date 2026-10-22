@@ -1,5 +1,7 @@
+
 package ma.youcode.ArlasRH.services;
 
+import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.models.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,42 +15,46 @@ public interface EmployeeService {
      * @param employee
      * @return
      */
-    Employee createEmployee(Employee employee);
+    EmployeeResponse createEmployee(Employee employee);
 
     /**
      *
      * @param id
-     * @param updatedEmployee
+     * @param employee
      * @return
      */
-    Employee updateEmployee(Long id, Employee updatedEmployee);
+    EmployeeResponse updateEmployee(Long id, Employee employee);
 
     /**
      *
      * @param id
      * @return
      */
-    Optional<Employee> getEmployeeById(Long id);
+    EmployeeResponse getEmployeeById(Long id);
 
     /**
+     *
      * @return
      */
-    List<Employee> getAllEmployees();
+    List<EmployeeResponse> getAllEmployees();
 
     /**
+     *
      * @param keyword
      * @param pageable
      * @return
      */
-    Page<Employee> getEmployeesWithPaginationAndSearch(String keyword, Pageable pageable);
+    Page<EmployeeResponse> getEmployeesWithPaginationAndSearch(String keyword, Pageable pageable);
 
     /**
+     *
      * @param managerId
      * @return
      */
-    List<Employee> getTeamByManagerId(Long managerId);
+    List<EmployeeResponse> getTeamByManagerId(Long managerId);
 
     /**
+     *
      * @param id
      */
     void deleteEmployee(Long id);
