@@ -1,0 +1,5 @@
+$kind: http-request
+name: get employee
+url: "{{pathUrl}}/employes/5"
+method: DELETE
+order: 2957

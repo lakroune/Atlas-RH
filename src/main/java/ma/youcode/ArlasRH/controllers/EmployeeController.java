@@ -48,5 +48,15 @@ public class EmployeeController {
             return new ResponseEntity<String>(" employe not exist", HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+        try {
+            employeeService.deleteEmployee(id);
+            return new ResponseEntity<String>("Employees have been deleted successfully.", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+
+        }
+    }
 
 }

@@ -60,6 +60,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(Long id) {
-
+        if (employeeRepository.existsById(id))
+            employeeRepository.deleteById(id);
+        else throw new RuntimeException("Employee does not exist.");
     }
 }
