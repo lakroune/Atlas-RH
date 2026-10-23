@@ -19,24 +19,25 @@ public class DepartmentController {
 
 
     public DepartmentController(DepartmentService departmentService, DepartmentMapper departmentMapper) {
-
         this.departmentService = departmentService;
         this.departmentMapper = departmentMapper;
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DepartmentResponse createDepartment(@RequestBody Department department) {
         return departmentService.createDepartement(department);
     }
 
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<DepartmentResponse> getAllDepartments() {
-        List<DepartmentResponse> departments = departmentService.getAllDepartements();
-        return departments;
+        return departmentService.getAllDepartements();
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<String> deleteDepartments(@PathVariable Long id) {
         try {
             departmentService.deleteDepartement(id);
@@ -48,6 +49,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public DepartmentResponse getDepartmentByID(@PathVariable Long id) {
         return departmentService.getDepartementById(id);
 

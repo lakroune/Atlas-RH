@@ -4,7 +4,7 @@ package ma.youcode.ArlasRH.dtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class DepartmentRequest {
+public class DepartmentCreateRequest {
 
     @NotBlank(message = "Department name is vide")
     @Size(min = 3, max = 100,
@@ -15,7 +15,7 @@ public class DepartmentRequest {
     @Size(min = 5, max = 255, message = "Department description be must 5 and 255 characters")
     private String description;
 
-    public DepartmentRequest() {
+    public DepartmentCreateRequest() {
     }
 
     public String getName() {

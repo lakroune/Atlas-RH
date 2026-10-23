@@ -6,13 +6,13 @@ body:
   type: json
   content: "{\r
 
-    \    \"matricule\": \"EMP02000\",\r
+    \    \"matricule\": \"EMP0s2000\",\r
 
     \    \"firstName\": \"Ismail\",\r
 
     \    \"lastName\": \"Lakroune\",\r
 
-    \    \"email\": \"ismail.lhs@example.com\",\r
+    \    \"email\": \"ismail.lhss@example.com\",\r
 
     \    \"position\": \"Développeur Full Stack\",\r
 

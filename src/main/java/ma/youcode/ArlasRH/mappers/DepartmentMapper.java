@@ -1,6 +1,6 @@
 package ma.youcode.ArlasRH.mappers;
 
-import ma.youcode.ArlasRH.dtos.DepartmentRequest;
+import ma.youcode.ArlasRH.dtos.DepartmentCreateRequest;
 import ma.youcode.ArlasRH.dtos.DepartmentResponse;
 import ma.youcode.ArlasRH.models.Department;
 import org.springframework.stereotype.Component;
@@ -17,10 +17,10 @@ public class DepartmentMapper {
     }
 
 
-    public Department toEntity(DepartmentRequest departmentRequest) {
+    public Department toEntity(DepartmentCreateRequest departmentCreateRequest) {
         return new Department(
-                departmentRequest.getName(),
-                departmentRequest.getDescription()
+                departmentCreateRequest.getName(),
+                departmentCreateRequest.getDescription()
         );
     }
 

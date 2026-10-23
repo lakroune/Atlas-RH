@@ -29,32 +29,27 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeResponse> getAllEmployes(
-            @PathVariable Long idD) {
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeResponse> getAllEmployes(@PathVariable Long idD) {
         return employeeService.getEmployeesByDepartmentId(idD);
     }
 
     @PostMapping
-    public EmployeeResponse createEmployee(
-            @PathVariable Long idD,
-            @Valid @RequestBody EmployeeRequest request) {
-
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeResponse createEmployee(@PathVariable Long idD, @Valid @RequestBody EmployeeRequest request) {
         Employee employee = employeeMapper.toEntity(request);
-
         return employeeService.createEmployee(idD, employee);
     }
 
     @GetMapping("/{idE}")
-    public EmployeeResponse getEmployeeById(
-            @PathVariable Long idD,
-            @PathVariable Long idE) {
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeResponse getEmployeeById(@PathVariable Long idD, @PathVariable Long idE) {
         return employeeService.getEmployeeById(idD, idE);
     }
 
     @DeleteMapping("/{idE}")
-    public ResponseEntity<Void> deleteEmployee(
-            @PathVariable Long idD,
-            @PathVariable Long idE) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long idD, @PathVariable Long idE) {
 
         employeeService.deleteEmployee(idD, idE);
         return ResponseEntity.noContent().build();
