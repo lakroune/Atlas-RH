@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{pathUrl}}/employes/1/contracts"
+method: GET
+body:
+  type: json
+  content: "{\r\n    \r\n}"
+order: 1557

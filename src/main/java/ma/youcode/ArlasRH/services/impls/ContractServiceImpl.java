@@ -1,13 +1,15 @@
 package ma.youcode.ArlasRH.services.impls;
 
-import ma.youcode.ArlasRH.daos.ContractRepository;
-import ma.youcode.ArlasRH.models.Contract;
-import ma.youcode.ArlasRH.services.ContractService;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import ma.youcode.ArlasRH.daos.ContractRepository;
+import ma.youcode.ArlasRH.dtos.ContractResponse;
+import ma.youcode.ArlasRH.models.Contract;
+import ma.youcode.ArlasRH.services.ContractService;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -29,7 +31,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public List<Contract> getContractHistoryByEmployeeId(Long employeeId) {
+    public List<ContractResponse> getContractHistoryByEmployeeId(Long employeeId) {
         return List.of();
     }
 

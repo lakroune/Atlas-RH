@@ -1,5 +1,6 @@
 package ma.youcode.ArlasRH.services;
 
+import ma.youcode.ArlasRH.dtos.ContractResponse;
 import ma.youcode.ArlasRH.models.Contract;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public interface ContractService {
      * @param employeeId
      * @return
      */
-    List<Contract> getContractHistoryByEmployeeId(Long employeeId);
+    List<ContractResponse> getContractHistoryByEmployeeId(Long employeeId);
 
     /**
      *
