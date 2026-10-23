@@ -58,4 +58,9 @@ public class ContractServiceImpl implements ContractService {
     public Optional<Contract> getContractById(Long id) {
         return Optional.empty();
     }
+
+    @Override
+    public ContractResponse terminerContract(Long idE, Long idC) {
+        return null;
+    }
 }

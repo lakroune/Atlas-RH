@@ -9,7 +9,7 @@ import ma.youcode.ArlasRH.models.Employee;
 
 @Component
 public class ContractMapper {
-    public  ContractResponse toResponse(Contract contract) {
+    public ContractResponse toResponse(Contract contract) {
 
         return new ContractResponse(
                 contract.getId(),
@@ -17,6 +17,7 @@ public class ContractMapper {
                 contract.getStartDate(),
                 contract.getEndDate(),
                 contract.getGrossSalary(),
+                contract.getActive(),
                 contract.getEmployee().getId());
     }
 

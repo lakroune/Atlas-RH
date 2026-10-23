@@ -37,4 +37,6 @@ public interface ContractService {
      * @return
      */
     Optional<Contract> getContractById(Long id);
+
+    ContractResponse terminerContract(Long idE, Long idC);
 }

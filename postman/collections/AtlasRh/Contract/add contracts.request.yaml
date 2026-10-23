@@ -1,11 +1,11 @@
 $kind: http-request
-url: "{{pathUrl}}/employes/10/contracts"
+url: "{{pathUrl}}/employes/1/contracts"
 method: POST
 body:
   type: json
   content: "{\r
 
-    \  \"type\": \"CDI\",\r
+    \  \"type\": \"CDD\",\r
 
     \  \"startDate\": \"2026-01-01\",\r
 

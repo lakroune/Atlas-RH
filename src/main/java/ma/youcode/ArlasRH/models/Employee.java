@@ -40,8 +40,8 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LeaveRequest> leaveRequest;
 
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Contract contract;
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Contract> contracts;
 
     @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> employees;
@@ -53,15 +53,19 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String matricule, String firstName, String lastName, String email, String position, Role role, LocalDate dateDeRejoindre, Department departement) {
+    public Employee(String matricule, String firstName, String lastName, String email, String position, LocalDate dateDeRejoindre, Role role, Department departement, List<LeaveRequest> leaveRequest, List<Contract> contracts, List<Employee> employees, Employee manager) {
         this.matricule = matricule;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.position = position;
-        this.role = role;
         this.dateDeRejoindre = dateDeRejoindre;
+        this.role = role;
         this.departement = departement;
+        this.leaveRequest = leaveRequest;
+        this.contracts = contracts;
+        this.employees = employees;
+        this.manager = manager;
     }
 
     public Long getId() {
@@ -80,20 +84,20 @@ public class Employee {
         this.matricule = matricule;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getEmail() {
@@ -134,5 +138,37 @@ public class Employee {
 
     public void setDepartement(Department departement) {
         this.departement = departement;
+    }
+
+    public List<LeaveRequest> getLeaveRequest() {
+        return leaveRequest;
+    }
+
+    public void setLeaveRequest(List<LeaveRequest> leaveRequest) {
+        this.leaveRequest = leaveRequest;
+    }
+
+    public List<Contract> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(List<Contract> contracts) {
+        this.contracts = contracts;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public Employee getManager() {
+        return manager;
+    }
+
+    public void setManager(Employee manager) {
+        this.manager = manager;
     }
 }

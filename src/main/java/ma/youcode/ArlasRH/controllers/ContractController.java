@@ -43,9 +43,18 @@ public class ContractController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ContractResponse createContract(@PathVariable Long idE,
-            @Valid @RequestBody ContractCreateRequest request) {
+                                           @Valid @RequestBody ContractCreateRequest request) {
 
         Contract contract = contractMapper.toEntity(request);
         return contractService.createContract(idE, contract);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ContractResponse terminerContract(@PathVariable Long idE, @PathVariable Long idC) {
+
+
+        return contractService.terminerContract(idE, idC);
+    }
+
 }

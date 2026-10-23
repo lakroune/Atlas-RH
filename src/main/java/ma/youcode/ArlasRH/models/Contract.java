@@ -25,8 +25,11 @@ public class Contract {
     @Column(nullable = false)
     private Double grossSalary;
 
-    @OneToOne
-    @JoinColumn(name = "employee_id", nullable = false, unique = true)
+    @Column(nullable = false)
+    private Boolean isActive=true;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     public Contract() {
@@ -38,6 +41,7 @@ public class Contract {
         this.endDate = endDate;
         this.grossSalary = grossSalary;
         this.employee = employee;
+        this.isActive = true;
     }
 
     public Long getId() {
@@ -86,5 +90,13 @@ public class Contract {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

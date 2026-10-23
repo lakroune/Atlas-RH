@@ -12,20 +12,21 @@ public class ContractResponse {
     private LocalDate startDate;
     private LocalDate endDate;
     private Double grossSalary;
+    private boolean isActive;
     private Long employeeId;
 
     public ContractResponse() {
     }
 
-    public ContractResponse(Long id, ContratType type, LocalDate startDate, LocalDate endDate, Double grossSalary, Long employeeId) {
+    public ContractResponse(Long id, ContratType type, LocalDate startDate, LocalDate endDate, Double grossSalary, boolean isActive, Long employeeId) {
         this.id = id;
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
         this.grossSalary = grossSalary;
         this.employeeId = employeeId;
+        this.isActive = isActive;
     }
-
 
 
     public Long getId() {
@@ -66,6 +67,14 @@ public class ContractResponse {
 
     public void setGrossSalary(Double grossSalary) {
         this.grossSalary = grossSalary;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Long getEmployeeId() {
