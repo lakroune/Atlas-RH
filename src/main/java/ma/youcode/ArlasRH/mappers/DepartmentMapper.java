@@ -24,4 +24,6 @@ public class DepartmentMapper {
         );
     }
 
+    public static class ContractMapper {
+    }
 }
