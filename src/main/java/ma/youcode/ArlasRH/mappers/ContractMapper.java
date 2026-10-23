@@ -35,4 +35,6 @@ public class ContractMapper {
                 contract.getGrossSalary(),
                 employeeId);
     }
+
+
 }
