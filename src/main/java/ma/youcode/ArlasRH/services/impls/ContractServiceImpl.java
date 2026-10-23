@@ -2,7 +2,6 @@ package ma.youcode.ArlasRH.services.impls;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +9,9 @@ import org.springframework.stereotype.Service;
 import ma.youcode.ArlasRH.daos.ContractRepository;
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.dtos.ContractResponse;
+import ma.youcode.ArlasRH.exceptions.ContractAlreadyTerminatedException;
+import ma.youcode.ArlasRH.exceptions.ContractNotFoundException;
+import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
 import ma.youcode.ArlasRH.mappers.ContractMapper;
 import ma.youcode.ArlasRH.models.Contract;
 import ma.youcode.ArlasRH.models.Employee;
@@ -55,12 +57,33 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Optional<Contract> getContractById(Long id) {
-        return Optional.empty();
+    public ContractResponse terminerContract(Long idE, Long idC) {
+        if (!employeeRepository.existsById(idE)) {
+            throw new EmployeeNotFoundException("Employee not found.");
+        }
+
+        Contract contract = contractRepository.findById(idC)
+                .orElseThrow(() -> new ContractNotFoundException("Contract not found."));
+
+        if (contract.getEndDate() != null) {
+            throw new ContractAlreadyTerminatedException("Contract is already terminated.");
+        }
+
+        contract.setEndDate(LocalDate.now());
+        contract.setActive(false);
+        Contract updatedContract = contractRepository.save(contract);
+        return contractMapper.toResponse(updatedContract);
     }
 
     @Override
-    public ContractResponse terminerContract(Long idE, Long idC) {
-        return null;
+    public ContractResponse getContractById(Long idE, Long idC) {
+        if (!employeeRepository.existsById(idE)) {
+            throw new EmployeeNotFoundException("Employee not found.");
+        }
+
+        Contract contract = contractRepository.findById(idC)
+                .orElseThrow(() -> new ContractNotFoundException("Contract not found."));
+
+        return contractMapper.toResponse(contract);
     }
 }

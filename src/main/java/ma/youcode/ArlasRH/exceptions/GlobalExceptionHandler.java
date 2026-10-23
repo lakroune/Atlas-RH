@@ -54,7 +54,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             ContractNotFoundException.class,
-            EmployeeAlreadyHasActiveContractException.class,
             ContractAlreadyTerminatedException.class
     })
     public ResponseEntity<Map<String, String>> handleContractExceptions(RuntimeException e) {
@@ -62,7 +61,7 @@ public class GlobalExceptionHandler {
 
         if (e instanceof ContractNotFoundException) {
             status = HttpStatus.NOT_FOUND;
-        } else if (e instanceof EmployeeAlreadyHasActiveContractException) {
+        } else if (e instanceof ContractAlreadyTerminatedException) {
             status = HttpStatus.CONFLICT;
         }
 

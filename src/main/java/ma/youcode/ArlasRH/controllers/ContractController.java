@@ -4,14 +4,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import ma.youcode.ArlasRH.dtos.ContractCreateRequest;
 import ma.youcode.ArlasRH.dtos.ContractResponse;
 import ma.youcode.ArlasRH.mappers.ContractMapper;
 import ma.youcode.ArlasRH.models.Contract;
-import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.ContractService;
 
 @RestController
@@ -36,19 +42,20 @@ public class ContractController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ContractResponse createContract(@PathVariable Long idE,
-                                           @Valid @RequestBody ContractCreateRequest request) {
-
+    public ContractResponse createContract(@PathVariable Long idE, @Valid @RequestBody ContractCreateRequest request) {
         Contract contract = contractMapper.toEntity(request);
         return contractService.createContract(idE, contract);
     }
 
-    @PatchMapping("/{idC}/terminer")
+    @GetMapping("/{idC}")
     @ResponseStatus(HttpStatus.OK)
-    public ContractResponse terminerContract(
-            @PathVariable Long idE,
-            @PathVariable Long idC) {
+    public ContractResponse getContractById(@PathVariable Long idE, @PathVariable Long idC) {
+        return contractService.getContractById(idE, idC);
+    }
 
+    @PatchMapping("/{idC}")
+    @ResponseStatus(HttpStatus.OK)
+    public ContractResponse terminerContract(@PathVariable Long idE, @PathVariable Long idC) {
         return contractService.terminerContract(idE, idC);
     }
 
