@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.mappers.ContractMapper;
+import ma.youcode.ArlasRH.models.Employee;
 import org.springframework.stereotype.Service;
 
 import ma.youcode.ArlasRH.daos.ContractRepository;
@@ -22,15 +23,20 @@ public class ContractServiceImpl implements ContractService {
     private final EmployeeRepository employeeRepository;
 
     public ContractServiceImpl(ContractRepository contractRepository, ContractMapper contractMapper,
-            EmployeeRepository employeeRepository) {
+                               EmployeeRepository employeeRepository) {
         this.contractRepository = contractRepository;
         this.contractMapper = contractMapper;
         this.employeeRepository = employeeRepository;
     }
 
     @Override
-    public Contract createContract(Long employeeId, Contract contract) {
-        return null;
+    public ContractResponse createContract(Long employeeId, Contract contract) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found."));
+
+        contract.setEmployee(employee);
+        Contract savedContract = contractRepository.save(contract);
+        return contractMapper.toResponse(savedContract);
     }
 
     @Override

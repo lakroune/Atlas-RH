@@ -9,23 +9,7 @@ import ma.youcode.ArlasRH.models.Employee;
 
 @Component
 public class ContractMapper {
-
-    public Contract toEntity(ContractCreateRequest request, Employee employee) {
-        Contract contract = new Contract();
-        contract.setType(request.getType());
-        contract.setStartDate(request.getStartDate());
-        contract.setEndDate(request.getEndDate());
-        contract.setGrossSalary(request.getGrossSalary());
-        contract.setEmployee(employee);
-        return contract;
-    }
-
-    public ContractResponse toResponse(Contract contract) {
-        if (contract == null) {
-            return null;
-        }
-
-        Long employeeId = contract.getEmployee().getId();
+    public  ContractResponse toResponse(Contract contract) {
 
         return new ContractResponse(
                 contract.getId(),
@@ -33,8 +17,16 @@ public class ContractMapper {
                 contract.getStartDate(),
                 contract.getEndDate(),
                 contract.getGrossSalary(),
-                employeeId);
+                contract.getEmployee().getId());
     }
 
+    public Contract toEntity(ContractCreateRequest request) {
+        Contract contract = new Contract();
+        contract.setType(request.getType());
+        contract.setStartDate(request.getStartDate());
+        contract.setEndDate(request.getEndDate());
+        contract.setGrossSalary(request.getGrossSalary());
+        return contract;
+    }
 
 }

@@ -14,7 +14,7 @@ public interface ContractService {
      * @param contract
      * @return
      */
-    Contract createContract(Long employeeId, Contract contract);
+    ContractResponse createContract(Long employeeId, Contract contract);
 
     /**
      *

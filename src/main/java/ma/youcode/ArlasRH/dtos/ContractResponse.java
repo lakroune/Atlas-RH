@@ -2,6 +2,7 @@ package ma.youcode.ArlasRH.dtos;
 
 import java.time.LocalDate;
 
+import ma.youcode.ArlasRH.models.Contract;
 import ma.youcode.ArlasRH.models.enums.ContratType;
 
 public class ContractResponse {
@@ -24,6 +25,8 @@ public class ContractResponse {
         this.grossSalary = grossSalary;
         this.employeeId = employeeId;
     }
+
+
 
     public Long getId() {
         return id;

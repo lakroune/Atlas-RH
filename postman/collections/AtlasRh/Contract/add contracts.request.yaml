@@ -1,7 +1,17 @@
 $kind: http-request
-url: "{{pathUrl}}/employes/1/contracts"
-method: GET
+url: "{{pathUrl}}/employes/10/contracts"
+method: POST
 body:
   type: json
-  content: "{\r\n    \r\n}"
+  content: "{\r
+
+    \  \"type\": \"CDI\",\r
+
+    \  \"startDate\": \"2026-01-01\",\r
+
+    \  \"endDate\": null,\r
+
+    \  \"grossSalary\": 12000.0\r
+
+    }"
 order: 1557

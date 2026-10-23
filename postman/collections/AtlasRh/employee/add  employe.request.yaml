@@ -1,5 +1,4 @@
 $kind: http-request
-name: get all employes
 url: "{{pathUrl}}/departments/5/employes"
 method: POST
 body:

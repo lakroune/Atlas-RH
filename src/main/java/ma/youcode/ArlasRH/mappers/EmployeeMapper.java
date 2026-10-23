@@ -1,15 +1,16 @@
 package ma.youcode.ArlasRH.mappers;
 
+import org.springframework.stereotype.Component;
+
 import ma.youcode.ArlasRH.dtos.EmployeeRequest;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
+import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
-import org.springframework.stereotype.Component;
 
 @Component
 public class EmployeeMapper {
 
     public EmployeeResponse toResponse(Employee employee) {
-
 
         return new EmployeeResponse(
                 employee.getId(),
@@ -20,12 +21,10 @@ public class EmployeeMapper {
                 employee.getPosition(),
                 employee.getDateDeRejoindre(),
                 employee.getRole(),
-                employee.getDepartement().getId()
-        );
+                employee.getDepartement().getId());
     }
 
     public Employee toEntity(EmployeeRequest employeeRequest) {
-
 
         Employee employee = new Employee();
 
@@ -36,7 +35,6 @@ public class EmployeeMapper {
         employee.setPosition(employeeRequest.getPosition());
         employee.setDateDeRejoindre(employeeRequest.getDateDeRejoindre());
         employee.setRole(employeeRequest.getRole());
-
         return employee;
     }
 }
