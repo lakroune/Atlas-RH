@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.mappers.ContractMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,13 @@ public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
     private final ContractMapper contractMapper;
+    private final EmployeeRepository employeeRepository;
 
-    public ContractServiceImpl(ContractRepository contractRepository, ContractMapper contractMapper) {
+    public ContractServiceImpl(ContractRepository contractRepository, ContractMapper contractMapper,
+            EmployeeRepository employeeRepository) {
         this.contractRepository = contractRepository;
         this.contractMapper = contractMapper;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -36,7 +40,8 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractResponse> getContractHistoryByEmployeeId(Long employeeId) {
-
+        if (!employeeRepository.existsById(employeeId))
+            throw new RuntimeException("Employee not found.");
         return contractRepository.findByEmployee_Id(employeeId)
                 .stream()
                 .map(contractMapper::toResponse)
