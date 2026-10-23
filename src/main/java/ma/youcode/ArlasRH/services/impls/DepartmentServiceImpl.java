@@ -3,6 +3,7 @@ package ma.youcode.ArlasRH.services.impls;
 
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.dtos.DepartmentResponse;
+import ma.youcode.ArlasRH.exceptions.DepartmentAlreadyExistsException;
 import ma.youcode.ArlasRH.mappers.DepartmentMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.services.DepartmentService;
@@ -29,7 +30,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentResponse createDepartement(Department department) {
 
         if (departmentRepository.existsByName(department.getName())) {
-            throw new RuntimeException(
+            throw new DepartmentAlreadyExistsException(
                     "The department name already exists."
             );
         }

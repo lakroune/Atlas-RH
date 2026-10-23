@@ -4,13 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import ma.youcode.ArlasRH.dtos.ContractCreateRequest;
@@ -49,10 +43,11 @@ public class ContractController {
         return contractService.createContract(idE, contract);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ContractResponse terminerContract(@PathVariable Long idE, @PathVariable Long idC) {
-
+    @PatchMapping("/{idC}/terminer")
+    @ResponseStatus(HttpStatus.OK)
+    public ContractResponse terminerContract(
+            @PathVariable Long idE,
+            @PathVariable Long idC) {
 
         return contractService.terminerContract(idE, idC);
     }
