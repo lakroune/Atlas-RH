@@ -4,6 +4,8 @@ package ma.youcode.ArlasRH.services.impls;
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.dtos.DepartmentResponse;
 import ma.youcode.ArlasRH.exceptions.DepartmentAlreadyExistsException;
+import ma.youcode.ArlasRH.exceptions.DepartmentDeleteException;
+import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
 import ma.youcode.ArlasRH.mappers.DepartmentMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.services.DepartmentService;
@@ -54,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentRepository.findById(id)
                 .map(departmentMapper::toResponse)
                 .orElseThrow(() ->
-                        new RuntimeException("Department not found")
+                        new DepartmentNotFoundException("Department not found")
                 );
     }
 
@@ -62,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentResponse updateDepartement(Long id, Department updatedDepartment) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Department not found.")
+                        new DepartmentNotFoundException("Department not found.")
                 );
         department.setName(updatedDepartment.getName());
         department.setDescription(updatedDepartment.getDescription());
@@ -73,9 +75,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartement(Long id) {
 
-        if (!departmentRepository.existsById(id)) {
-            throw new RuntimeException("Department not found.");
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() ->
+                        new DepartmentNotFoundException("Department not found."));
+
+        if (!department.getEmployees().isEmpty()) {
+            throw new DepartmentDeleteException(
+                    "Cannot delete department because it has employees."
+            );
         }
-        departmentRepository.deleteById(id);
+
+        departmentRepository.delete(department);
     }
 }
