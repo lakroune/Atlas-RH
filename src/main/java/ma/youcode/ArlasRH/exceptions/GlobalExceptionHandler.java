@@ -30,4 +30,25 @@ public class GlobalExceptionHandler {
                 .status(status)
                 .body(Map.of("message", e.getMessage()));
     }
+
+    @ExceptionHandler({
+            EmployeeAlreadyExistsException.class,
+            EmployeeNotFoundException.class,
+            EmployeeAlreadyHasActiveContractException.class
+    })
+    public ResponseEntity<Map<String, String>> handleEmployeeExceptions(RuntimeException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        if (e instanceof EmployeeAlreadyExistsException) {
+            status = HttpStatus.CONFLICT;
+        } else if (e instanceof EmployeeNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        } else if (e instanceof EmployeeAlreadyHasActiveContractException) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return ResponseEntity
+                .status(status)
+                .body(Map.of("message", e.getMessage()));
+    }
 }
