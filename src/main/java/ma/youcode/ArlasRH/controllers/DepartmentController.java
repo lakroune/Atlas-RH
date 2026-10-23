@@ -17,7 +17,6 @@ public class DepartmentController {
     private final DepartmentService departmentService;
     private final DepartmentMapper departmentMapper;
 
-
     public DepartmentController(DepartmentService departmentService, DepartmentMapper departmentMapper) {
         this.departmentService = departmentService;
         this.departmentMapper = departmentMapper;
@@ -28,7 +27,6 @@ public class DepartmentController {
     public DepartmentResponse createDepartment(@RequestBody Department department) {
         return departmentService.createDepartement(department);
     }
-
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -46,6 +44,13 @@ public class DepartmentController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @PatchMapping
+    @RequestMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public DepartmentResponse updateDepartment(@PathVariable Long id,  @RequestBody Department department) {
+        return departmentService.updateDepartement(id, department);
     }
 
     @GetMapping("/{id}")

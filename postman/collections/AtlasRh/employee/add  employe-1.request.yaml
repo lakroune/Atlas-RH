@@ -1,0 +1,14 @@
+$kind: http-request
+name: add  employe
+url: "{{pathUrl}}/departments/1/employes/1"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"position\": \"DEVELOPER\",\r
+
+    \    \"role\": \"MANAGER\"\r
+
+    }"
+order: 1013

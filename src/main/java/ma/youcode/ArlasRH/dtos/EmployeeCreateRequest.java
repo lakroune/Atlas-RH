@@ -9,7 +9,7 @@ import ma.youcode.ArlasRH.models.enums.Role;
 
 import java.time.LocalDate;
 
-public class EmployeeRequest {
+public class EmployeeCreateRequest {
 
     @NotBlank(message = "Matricule is vide")
     @Size(min = 3, max = 20, message = "Matricule must  3 and 20 char")
@@ -37,7 +37,7 @@ public class EmployeeRequest {
     private Role role;
 
 
-    public EmployeeRequest() {
+    public EmployeeCreateRequest() {
     }
 
     public String getMatricule() {

@@ -1,0 +1,14 @@
+$kind: http-request
+name: add departement
+url: "{{pathUrl}}/departments/1"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"departement 3\",\r
+
+    \    \"description\": \"Département responsable \"\r
+
+    }"
+order: 1780

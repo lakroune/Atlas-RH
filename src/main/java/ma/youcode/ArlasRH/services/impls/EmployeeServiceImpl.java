@@ -1,6 +1,11 @@
 
 package ma.youcode.ArlasRH.services.impls;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
@@ -11,14 +16,6 @@ import ma.youcode.ArlasRH.mappers.EmployeeMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.EmployeeService;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -57,11 +54,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponse updateEmployee(Long id, Employee updatedEmployee) {
-        return employeeMapper.toResponse(new Employee());
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public EmployeeResponse getEmployeeById(
             Long idDepartment, Long idEmployee) {
@@ -76,7 +68,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeMapper.toResponse(employee);
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -125,5 +116,22 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .stream()
                 .map(employeeMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public EmployeeResponse updateEmployee(Long idD, Long idE, Employee employee) {
+        if (!departmentRepository.existsById(idD)) {
+            throw new DepartmentNotFoundException("Department not found.");
+        }
+
+        Employee existingEmployee = employeeRepository
+                .findByIdAndDepartement_Id(idE, idD)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
+
+        existingEmployee.setRole(employee.getRole());
+        existingEmployee.setPosition(employee.getPosition());
+
+        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+        return employeeMapper.toResponse(updatedEmployee);
     }
 }

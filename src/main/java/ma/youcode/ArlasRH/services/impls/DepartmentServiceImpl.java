@@ -1,6 +1,12 @@
 
 package ma.youcode.ArlasRH.services.impls;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.dtos.DepartmentResponse;
 import ma.youcode.ArlasRH.exceptions.DepartmentAlreadyExistsException;
@@ -9,12 +15,6 @@ import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
 import ma.youcode.ArlasRH.mappers.DepartmentMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.services.DepartmentService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {

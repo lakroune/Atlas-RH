@@ -2,9 +2,8 @@ package ma.youcode.ArlasRH.mappers;
 
 import org.springframework.stereotype.Component;
 
-import ma.youcode.ArlasRH.dtos.EmployeeRequest;
+import ma.youcode.ArlasRH.dtos.EmployeeCreateRequest;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
-import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
 
 @Component
@@ -24,17 +23,17 @@ public class EmployeeMapper {
                 employee.getDepartement().getId());
     }
 
-    public Employee toEntity(EmployeeRequest employeeRequest) {
+    public Employee toEntity(EmployeeCreateRequest employeeCreateRequest) {
 
         Employee employee = new Employee();
 
-        employee.setMatricule(employeeRequest.getMatricule());
-        employee.setFirstName(employeeRequest.getFirstName());
-        employee.setLastName(employeeRequest.getLastName());
-        employee.setEmail(employeeRequest.getEmail());
-        employee.setPosition(employeeRequest.getPosition());
-        employee.setDateDeRejoindre(employeeRequest.getDateDeRejoindre());
-        employee.setRole(employeeRequest.getRole());
+        employee.setMatricule(employeeCreateRequest.getMatricule());
+        employee.setFirstName(employeeCreateRequest.getFirstName());
+        employee.setLastName(employeeCreateRequest.getLastName());
+        employee.setEmail(employeeCreateRequest.getEmail());
+        employee.setPosition(employeeCreateRequest.getPosition());
+        employee.setDateDeRejoindre(employeeCreateRequest.getDateDeRejoindre());
+        employee.setRole(employeeCreateRequest.getRole());
         return employee;
     }
 }
