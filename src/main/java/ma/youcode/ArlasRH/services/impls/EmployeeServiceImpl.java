@@ -4,6 +4,9 @@ package ma.youcode.ArlasRH.services.impls;
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
+import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
+import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyExistsException;
+import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
 import ma.youcode.ArlasRH.mappers.EmployeeMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
@@ -40,13 +43,13 @@ public class EmployeeServiceImpl implements EmployeeService {
             Long idDepartment, Employee employee) {
 
         Department department = departmentRepository.findById(idDepartment)
-                .orElseThrow(() -> new RuntimeException("Department not found."));
+                .orElseThrow(() -> new EmployeeNotFoundException("Department not found."));
 
         if (employeeRepository.existsByMatricule(employee.getMatricule())) {
-            throw new RuntimeException("Matricule already exists.");
+            throw new EmployeeAlreadyExistsException("Matricule already exists.");
         }
         if (employeeRepository.existsByEmail(employee.getEmail())) {
-            throw new RuntimeException("Email already exists.");
+            throw new EmployeeAlreadyExistsException("Email already exists.");
         }
         employee.setDepartement(department);
         Employee savedEmployee = employeeRepository.save(employee);
@@ -64,12 +67,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             Long idDepartment, Long idEmployee) {
 
         if (!departmentRepository.existsById(idDepartment)) {
-            throw new RuntimeException("Department not found.");
+            throw new EmployeeNotFoundException("Department not found.");
         }
 
         Employee employee = employeeRepository
                 .findByIdAndDepartement_Id(idEmployee, idDepartment)
-                .orElseThrow(() -> new RuntimeException("Employee not found."));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
 
         return employeeMapper.toResponse(employee);
     }
@@ -99,12 +102,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Long idDepartment, Long idEmployee) {
 
         if (!departmentRepository.existsById(idDepartment)) {
-            throw new RuntimeException("Department not found.");
+            throw new DepartmentNotFoundException("Department not found.");
         }
 
         Employee employee = employeeRepository
                 .findByIdAndDepartement_Id(idEmployee, idDepartment)
-                .orElseThrow(() -> new RuntimeException("Employee not found."));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
 
         employeeRepository.delete(employee);
     }
@@ -115,7 +118,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Long idDepartment) {
 
         if (!departmentRepository.existsById(idDepartment)) {
-            throw new RuntimeException("Department not found.");
+            throw new EmployeeNotFoundException("Department not found.");
         }
 
         return employeeRepository.findByDepartement_Id(idDepartment)
