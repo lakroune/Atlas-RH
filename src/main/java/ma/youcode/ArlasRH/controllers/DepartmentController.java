@@ -5,7 +5,11 @@ import ma.youcode.ArlasRH.mappers.DepartmentMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.services.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +35,21 @@ public class DepartmentController {
         return departmentService.createDepartement(department);
     }
 
-    @Operation(summary = "Get all departments", responses = {
-            @ApiResponse(responseCode = "200", description = "Departments retrieved successfully")
+   @Operation(
+    summary = "Get all departments",
+    description = "Retrieve the list of all departments."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Departments retrieved successfully",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(
+                    schema = @Schema(implementation = DepartmentResponse.class)
+                )
+            )
+        )
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
