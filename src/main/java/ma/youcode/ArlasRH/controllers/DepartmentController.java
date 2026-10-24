@@ -71,6 +71,16 @@ public class DepartmentController {
         return departmentService.getAllDepartements();
     }
 
+    @Operation(
+        summary = "Delete a department",
+        description = "Deletes a department by its identifier."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "Department deleted successfully"
+        )
+    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<String> deleteDepartments(@PathVariable Long id) {
@@ -83,6 +93,20 @@ public class DepartmentController {
 
     }
 
+    @Operation(
+        summary = "Update a department",
+        description = "Updates an existing department by its identifier."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Department updated successfully",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = DepartmentResponse.class)
+            )
+        )
+    })
     @PatchMapping
     @RequestMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -90,6 +114,20 @@ public class DepartmentController {
         return departmentService.updateDepartement(id, department);
     }
 
+    @Operation(
+        summary = "Get a department by ID",
+        description = "Returns the department matching the given identifier."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Department found successfully",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = DepartmentResponse.class)
+            )
+        )
+    })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DepartmentResponse getDepartmentByID(@PathVariable Long id) {
