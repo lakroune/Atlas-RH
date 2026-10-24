@@ -4,15 +4,18 @@ import ma.youcode.ArlasRH.dtos.DepartmentResponse;
 import ma.youcode.ArlasRH.mappers.DepartmentMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.services.DepartmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/departments")
+@Tag(name = "Departments", description = "Department management APIs")
 public class DepartmentController {
     private final DepartmentService departmentService;
     private final DepartmentMapper departmentMapper;
@@ -28,6 +31,9 @@ public class DepartmentController {
         return departmentService.createDepartement(department);
     }
 
+    @Operation(summary = "Get all departments", responses = {
+            @ApiResponse(responseCode = "200", description = "Departments retrieved successfully")
+    })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<DepartmentResponse> getAllDepartments() {
@@ -49,7 +55,7 @@ public class DepartmentController {
     @PatchMapping
     @RequestMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public DepartmentResponse updateDepartment(@PathVariable Long id,  @RequestBody Department department) {
+    public DepartmentResponse updateDepartment(@PathVariable Long id, @RequestBody Department department) {
         return departmentService.updateDepartement(id, department);
     }
 
