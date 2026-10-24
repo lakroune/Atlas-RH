@@ -29,6 +29,20 @@ public class DepartmentController {
         this.departmentMapper = departmentMapper;
     }
 
+    @Operation(
+        summary = "Create a department",
+        description = "Creates a new department with the provided information."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "201",
+            description = "Department created successfully",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = DepartmentResponse.class)
+            )
+        )
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DepartmentResponse createDepartment(@RequestBody Department department) {
