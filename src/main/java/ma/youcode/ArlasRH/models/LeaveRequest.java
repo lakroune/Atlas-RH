@@ -1,12 +1,16 @@
 package ma.youcode.ArlasRH.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import ma.youcode.ArlasRH.models.enums.LeaveStatus;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "leave_requests")
+@Setter
+@Getter
 public class LeaveRequest {
 
     @Id
@@ -56,83 +60,4 @@ public class LeaveRequest {
         this.leaveType = leaveType;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public Integer getWorkingDay() {
-        return workingDay;
-    }
-
-    public void setWorkingDay(Integer workingDay) {
-        this.workingDay = workingDay;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public LeaveStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LeaveStatus status) {
-        this.status = status;
-    }
-
-    public String getManagerComment() {
-        return managerComment;
-    }
-
-    public void setManagerComment(String managerComment) {
-        this.managerComment = managerComment;
-    }
-
-    public LocalDate getDecisionDate() {
-        return decisionDate;
-    }
-
-    public void setDecisionDate(LocalDate decisionDate) {
-        this.decisionDate = decisionDate;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public LeaveType getLeaveType() {
-        return leaveType;
-    }
-
-    public void setLeaveType(LeaveType leaveType) {
-        this.leaveType = leaveType;
-    }
 }

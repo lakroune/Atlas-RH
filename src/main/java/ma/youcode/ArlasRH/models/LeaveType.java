@@ -32,36 +32,4 @@ public class LeaveType {
         this.name = name;
         this.daysPerYear = daysPerYear;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getDaysPerYear() {
-        return daysPerYear;
-    }
-
-    public void setDaysPerYear(Integer daysPerYear) {
-        this.daysPerYear = daysPerYear;
-    }
-
-    public List<LeaveRequest> getLeaveRequestList() {
-        return leaveRequestList;
-    }
-
-    public void setLeaveRequestList(List<LeaveRequest> leaveRequestList) {
-        this.leaveRequestList = leaveRequestList;
-    }
 }

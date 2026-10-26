@@ -85,5 +85,35 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", e.getMessage()));
     }
 
+    @ExceptionHandler({
+            LeaveRequestNotFoundException.class
+    })
+    public ResponseEntity<Map<String, String>> handleLeaveRequestExceptions(RuntimeException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        if (e instanceof LeaveRequestNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return ResponseEntity
+                .status(status)
+                .body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler({
+            LeaveTypeNotFoundException.class
+    })
+    public ResponseEntity<Map<String, String>> handleLeaveTypeExceptions(RuntimeException e) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        if (e instanceof LeaveTypeNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return ResponseEntity
+                .status(status)
+                .body(Map.of("message", e.getMessage()));
+    }
 
 }

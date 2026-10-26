@@ -23,7 +23,7 @@ public interface LeaveRequestService {
      * @param status
      * @return
      */
-    List<LeaveRequest> getLeaveRequestsByEmployee(Long employeeId, LeaveStatus status);
+    List<LeaveRequestRespense> getLeaveRequestsByEmployee(Long employeeId, LeaveStatus status);
 
     /**
      *
@@ -31,12 +31,12 @@ public interface LeaveRequestService {
      * @param employeeId
      * @return
      */
-    LeaveRequest cancelLeaveRequest(Long leaveRequestId, Long employeeId);
+    LeaveRequestRespense cancelLeaveRequest(Long leaveRequestId, Long employeeId);
 
     /**
      *
      * @param id
      * @return
      */
-    Optional<LeaveRequest> getLeaveRequestById(Long id);
+    Optional<LeaveRequestRespense> getLeaveRequestById(Long id);
 }
