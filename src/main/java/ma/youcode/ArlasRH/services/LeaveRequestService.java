@@ -1,10 +1,12 @@
 package ma.youcode.ArlasRH.services;
 
-import ma.youcode.ArlasRH.models.LeaveRequest;
-import ma.youcode.ArlasRH.models.enums.LeaveStatus;
-
 import java.util.List;
 import java.util.Optional;
+
+import ma.youcode.ArlasRH.dtos.LeaveRequesCreatetRequest;
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
+import ma.youcode.ArlasRH.models.LeaveRequest;
+import ma.youcode.ArlasRH.models.enums.LeaveStatus;
 
 public interface LeaveRequestService {
     /**
@@ -13,7 +15,7 @@ public interface LeaveRequestService {
      * @param leaveRequest
      * @return
      */
-    LeaveRequest createLeaveRequest(Long employeeId, LeaveRequest leaveRequest);
+    LeaveRequestRespense createLeaveRequest(Long employeeId, LeaveRequesCreatetRequest leaveRequest);
 
     /**
      *

@@ -2,6 +2,8 @@ package ma.youcode.ArlasRH.services.impls;
 
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.daos.LeaveRequestRepository;
+import ma.youcode.ArlasRH.dtos.LeaveRequesCreatetRequest;
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.models.LeaveRequest;
@@ -23,16 +25,12 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     }
 
     @Override
-    public LeaveRequest createLeaveRequest(Long employeeId, LeaveRequest leaveRequest) {
+    public LeaveRequestRespense createLeaveRequest(Long employeeId, LeaveRequesCreatetRequest leaveRequest) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
 
-        leaveRequest.setEmployee(employee);
-        if (leaveRequest.getStatus() == null) {
-            leaveRequest.setStatus(LeaveStatus.EN_ATTENTE);
-        }
 
-        return leaveRequestRepository.save(leaveRequest);
+        return null;
     }
 
     @Override
