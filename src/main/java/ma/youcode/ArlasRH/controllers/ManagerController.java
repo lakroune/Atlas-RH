@@ -4,11 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -40,5 +36,20 @@ public class ManagerController {
             @PathVariable Long managerId) {
         List<EmployeeResponse> employees = employeeService.getEmployeesByManager_Id(managerId);
         return ResponseEntity.ok(employees);
+    }
+
+    @Operation(summary = "Assign employees to a manager", description = "Assigns a list of employee IDs to the selected manager.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employees assigned successfully"),
+            @ApiResponse(responseCode = "404", description = "Manager or employee not found")
+    })
+    @PostMapping("/{managerId}/employees")
+    public ResponseEntity<String> affecterEmployesAuManager(
+            @PathVariable Long managerId,
+            @RequestBody List<String> matricules) {
+
+        employeeService.affecterEmployesAuManager(managerId, matricules);
+
+        return ResponseEntity.ok("Employés affectés au manager avec succès");
     }
 }

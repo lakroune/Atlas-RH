@@ -32,4 +32,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             String lastName,
             Pageable pageable
     );
+
+    List<Employee> findAllByMatriculeIn(List<String> matricules);
 }

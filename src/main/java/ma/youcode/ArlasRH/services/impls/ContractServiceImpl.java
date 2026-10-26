@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import ma.youcode.ArlasRH.daos.ContractRepository;
@@ -18,18 +19,14 @@ import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.ContractService;
 
 @Service
+@RequiredArgsConstructor
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
     private final ContractMapper contractMapper;
     private final EmployeeRepository employeeRepository;
 
-    public ContractServiceImpl(ContractRepository contractRepository, ContractMapper contractMapper,
-                               EmployeeRepository employeeRepository) {
-        this.contractRepository = contractRepository;
-        this.contractMapper = contractMapper;
-        this.employeeRepository = employeeRepository;
-    }
+
 
     @Override
     public ContractResponse createContract(Long employeeId, Contract contract) {

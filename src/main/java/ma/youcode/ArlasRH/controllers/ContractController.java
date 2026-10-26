@@ -3,6 +3,8 @@ package ma.youcode.ArlasRH.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,15 +32,13 @@ import ma.youcode.ArlasRH.services.ContractService;
 @RestController
 @RequestMapping("/api/v1/employes/{idE}/contracts")
 @Tag(name = "Contracts", description = "Contract management APIs")
+@RequiredArgsConstructor
+
 public class ContractController {
 
     private final ContractService contractService;
     private final ContractMapper contractMapper;
 
-    public ContractController(ContractService contractService, ContractMapper contractMapper) {
-        this.contractService = contractService;
-        this.contractMapper = contractMapper;
-    }
 
     @Operation(
             summary = "Get all contracts for an employee",

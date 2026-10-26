@@ -35,4 +35,6 @@ public interface EmployeeService {
     List<EmployeeResponse> getEmployeesByManager_Id(Long managerId);
 
     List<EmployeeResponse> getEmployeesByDepartmentAndManagerId(Long idDepartment, Long managerId);
+
+    void affecterEmployesAuManager(Long managerId, List<String> matricules);
 }

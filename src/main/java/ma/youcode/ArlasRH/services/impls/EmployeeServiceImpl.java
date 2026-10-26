@@ -2,6 +2,7 @@
 package ma.youcode.ArlasRH.services.impls;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
 import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyExistsException;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
+import ma.youcode.ArlasRH.exceptions.ManagerNotFoundException;
 import ma.youcode.ArlasRH.mappers.EmployeeMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
@@ -171,5 +173,35 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .stream()
                 .map(employeeMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public void affecterEmployesAuManager(Long managerId, List<String> matricules) {
+        Employee manager = employeeRepository.findById(managerId)
+                .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
+
+        if (!manager.getRole().name().equalsIgnoreCase("MANAGER")) {
+            throw new ManagerNotFoundException("The employee with ID " + managerId + " is not a manager.");
+        }
+
+        List<Employee> employees = employeeRepository.findAllByMatriculeIn(matricules);
+
+        List<Employee> nonEmployeeStaff = employees.stream()
+                .filter(e -> !e.getRole().name().equalsIgnoreCase("EMPLOYE"))
+                .collect(Collectors.toList());
+
+        if (!nonEmployeeStaff.isEmpty()) {
+            throw new EmployeeNotFoundException("Only employees can be assigned to a manager.");
+        }
+
+        if (employees.size() != matricules.size()) {
+            throw new EmployeeNotFoundException("One or more employees not found.");
+        }
+
+        for (Employee employee : employees) {
+            employee.setManager(manager);
+        }
+
+        employeeRepository.saveAll(employees);
     }
 }

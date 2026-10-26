@@ -69,4 +69,21 @@ public class GlobalExceptionHandler {
                 .status(status)
                 .body(Map.of("message", e.getMessage()));
     }
+
+    @ExceptionHandler({
+            ManagerNotFoundException.class
+    })
+    public ResponseEntity<Map<String, String>> handleManagerExceptions(RuntimeException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        if (e instanceof ManagerNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return ResponseEntity
+                .status(status)
+                .body(Map.of("message", e.getMessage()));
+    }
+
+
 }
