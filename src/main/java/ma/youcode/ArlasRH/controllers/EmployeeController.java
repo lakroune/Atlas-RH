@@ -3,17 +3,13 @@ package ma.youcode.ArlasRH.controllers;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -64,8 +60,27 @@ public class EmployeeController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeResponse> getAllEmployes(@PathVariable Long idD) {
-        return employeeService.getEmployeesByDepartmentId(idD);
+    public Page<EmployeeResponse> getAllEmployes(
+            @PathVariable Long idD,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String nom
+    ) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                        direction.equalsIgnoreCase("desc")
+                                ? Sort.Direction.DESC
+                                : Sort.Direction.ASC,
+                        sortBy
+                )
+        );
+        return employeeService.getEmployeesByDepartmentId(
+                idD, nom, pageable
+        );
     }
 
     @Operation(

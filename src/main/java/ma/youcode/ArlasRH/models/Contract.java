@@ -26,7 +26,7 @@ public class Contract {
     private Double grossSalary;
 
     @Column(nullable = false)
-    private Boolean isActive=true;
+    private Boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)

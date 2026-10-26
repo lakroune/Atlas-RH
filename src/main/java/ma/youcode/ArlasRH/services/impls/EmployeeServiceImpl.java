@@ -3,6 +3,8 @@ package ma.youcode.ArlasRH.services.impls;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -133,5 +135,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee updatedEmployee = employeeRepository.save(existingEmployee);
         return employeeMapper.toResponse(updatedEmployee);
+    }
+
+    @Override
+    public Page<EmployeeResponse> getEmployeesByDepartmentId(
+            Long idD,
+            String nom,
+            Pageable pageable
+    ) {
+
+        Page<Employee> employees;
+
+        if (nom == null || nom.isBlank()) {
+            employees = employeeRepository
+                    .findByDepartement_Id(idD, pageable);
+        } else {
+            employees = employeeRepository
+                    .findByDepartement_IdAndFirstNameContainingIgnoreCase(
+                            idD, nom, pageable
+                    );
+        }
+
+        return employees.map(employeeMapper::toResponse);
     }
 }

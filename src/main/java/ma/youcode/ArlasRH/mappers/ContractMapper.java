@@ -8,6 +8,7 @@ import ma.youcode.ArlasRH.models.Contract;
 import ma.youcode.ArlasRH.models.Employee;
 
 @Component
+
 public class ContractMapper {
     public ContractResponse toResponse(Contract contract) {
 

@@ -12,7 +12,7 @@ public interface EmployeeService {
 
     EmployeeResponse createEmployee(Long idDepartment, Employee employee);
 
-    
+
     EmployeeResponse getEmployeeById(Long idDepartment, Long idEmployee);
 
     List<EmployeeResponse> getAllEmployees();
@@ -24,4 +24,10 @@ public interface EmployeeService {
     List<EmployeeResponse> getEmployeesByDepartmentId(Long idDepartment);
 
     EmployeeResponse updateEmployee(Long idD, Long idE, Employee employee);
+
+    Page<EmployeeResponse> getEmployeesByDepartmentId(
+            Long idD,
+            String nom,
+            Pageable pageable
+    );
 }
