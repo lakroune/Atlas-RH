@@ -3,7 +3,15 @@ package ma.youcode.ArlasRH.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepartmentRequest {
 
     @NotBlank(message = "Department name is vide")
@@ -15,22 +23,7 @@ public class DepartmentRequest {
     @Size(min = 5, max = 255, message = "Department description be must 5 and 255 characters")
     private String description;
 
-    public DepartmentRequest() {
-    }
+   
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    
 }

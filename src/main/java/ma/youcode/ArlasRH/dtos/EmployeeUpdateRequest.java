@@ -1,10 +1,16 @@
 package ma.youcode.ArlasRH.dtos;
 
-import java.time.LocalDate;
-
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ma.youcode.ArlasRH.models.enums.Role;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeUpdateRequest {
 
     private String position;
@@ -12,22 +18,5 @@ public class EmployeeUpdateRequest {
     @NotNull(message = "Role is vide")
     private Role role;
 
-    public EmployeeUpdateRequest() {
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+     
 }
