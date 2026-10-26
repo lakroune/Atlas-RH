@@ -1,12 +1,13 @@
 
 package ma.youcode.ArlasRH.services;
 
-import ma.youcode.ArlasRH.dtos.EmployeeResponse;
-import ma.youcode.ArlasRH.models.Employee;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import ma.youcode.ArlasRH.dtos.EmployeeResponse;
+import ma.youcode.ArlasRH.models.Employee;
 
 public interface EmployeeService {
 
@@ -30,4 +31,8 @@ public interface EmployeeService {
             String nom,
             Pageable pageable
     );
+
+    List<EmployeeResponse> getEmployeesByManager_Id(Long managerId);
+
+    List<EmployeeResponse> getEmployeesByDepartmentAndManagerId(Long idDepartment, Long managerId);
 }

@@ -141,8 +141,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<EmployeeResponse> getEmployeesByDepartmentId(
             Long idD,
             String nom,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
 
         Page<Employee> employees;
 
@@ -152,10 +151,25 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else {
             employees = employeeRepository
                     .findByDepartement_IdAndFirstNameContainingIgnoreCase(
-                            idD, nom, pageable
-                    );
+                            idD, nom, pageable);
         }
 
         return employees.map(employeeMapper::toResponse);
+    }
+
+    @Override
+    public List<EmployeeResponse> getEmployeesByManager_Id(Long managerId) {
+        return employeeRepository.findByManager_Id(managerId)
+                .stream()
+                .map(employeeMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public List<EmployeeResponse> getEmployeesByDepartmentAndManagerId(Long idDepartment, Long managerId) {
+        return employeeRepository.findByDepartement_IdAndManager_Id(idDepartment, managerId)
+                .stream()
+                .map(employeeMapper::toResponse)
+                .toList();
     }
 }

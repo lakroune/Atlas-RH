@@ -1,14 +1,13 @@
 package ma.youcode.ArlasRH.daos;
 
-import ma.youcode.ArlasRH.dtos.EmployeeResponse;
-import ma.youcode.ArlasRH.models.Employee;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import ma.youcode.ArlasRH.models.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
@@ -21,6 +20,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByIdAndDepartement_Id(Long idEmployee, Long idDepartment);
 
     List<Employee> findByManager_Id(Long managerId);
+
+    List<Employee> findByDepartement_IdAndManager_Id(Long idDepartment, Long managerId);
 
     Page<Employee> findByDepartement_Id(Long idD, Pageable pageable);
 

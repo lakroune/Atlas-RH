@@ -1,6 +1,8 @@
 
 package ma.youcode.ArlasRH.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,139 +42,90 @@ import ma.youcode.ArlasRH.services.EmployeeService;
 @Tag(name = "Employees", description = "Employee management APIs")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
-    private final EmployeeMapper employeeMapper;
-    private final EmployeeUpdateMapper employeeUpdateMapper;
+        private final EmployeeService employeeService;
+        private final EmployeeMapper employeeMapper;
+        private final EmployeeUpdateMapper employeeUpdateMapper;
 
-    public EmployeeController(
-            EmployeeService employeeService,
-            EmployeeMapper employeeMapper, EmployeeUpdateMapper employeeUpdateMapper) {
-        this.employeeService = employeeService;
-        this.employeeMapper = employeeMapper;
-        this.employeeUpdateMapper = employeeUpdateMapper;
-    }
+        public EmployeeController(
+                        EmployeeService employeeService,
+                        EmployeeMapper employeeMapper, EmployeeUpdateMapper employeeUpdateMapper) {
+                this.employeeService = employeeService;
+                this.employeeMapper = employeeMapper;
+                this.employeeUpdateMapper = employeeUpdateMapper;
+        }
 
-    @Operation(
-            summary = "Get all employees of a department",
-            description = "Returns the paginated list of employees belonging to the selected department. You can filter by employee name and sort by any field."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Employees retrieved successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = EmployeeResponse.class))
-                    )
-            ),
-            @ApiResponse(responseCode = "404", description = "Department not found")
-    })
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<EmployeeResponse> getAllEmployes(
-            @Parameter(description = "Department ID", required = true, example = "1")
-            @PathVariable Long idD,
-            @Parameter(description = "Page number to retrieve", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Number of employees per page", example = "10")
-            @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Field used to sort the employees", example = "id")
-            @RequestParam(defaultValue = "id") String sortBy,
-            @Parameter(description = "Sorting direction: asc or desc", example = "asc")
-            @RequestParam(defaultValue = "asc") String direction,
-            @Parameter(description = "Optional employee name filter", example = "sarah")
-            @RequestParam(required = false) String nom
-    ) {
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by(
-                        direction.equalsIgnoreCase("desc")
-                                ? Sort.Direction.DESC
-                                : Sort.Direction.ASC,
-                        sortBy
-                )
-        );
-        return employeeService.getEmployeesByDepartmentId(
-                idD, nom, pageable
-        );
-    }
+        @Operation(summary = "Get all employees of a department", description = "Returns the paginated list of employees belonging to the selected department. You can filter by employee name and sort by any field.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Employees retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = EmployeeResponse.class)))),
+                        @ApiResponse(responseCode = "404", description = "Department not found")
+        })
+        @GetMapping
+        @ResponseStatus(HttpStatus.OK)
+        public Page<EmployeeResponse> getAllEmployes(
+                        @Parameter(description = "Department ID", required = true, example = "1") @PathVariable Long idD,
+                        @Parameter(description = "Page number to retrieve", example = "0") @RequestParam(defaultValue = "0") int page,
+                        @Parameter(description = "Number of employees per page", example = "10") @RequestParam(defaultValue = "10") int size,
+                        @Parameter(description = "Field used to sort the employees", example = "id") @RequestParam(defaultValue = "id") String sortBy,
+                        @Parameter(description = "Sorting direction: asc or desc", example = "asc") @RequestParam(defaultValue = "asc") String direction,
+                        @Parameter(description = "Optional employee name filter", example = "sarah") @RequestParam(required = false) String nom) {
+                Pageable pageable = PageRequest.of(
+                                page,
+                                size,
+                                Sort.by(
+                                                direction.equalsIgnoreCase("desc")
+                                                                ? Sort.Direction.DESC
+                                                                : Sort.Direction.ASC,
+                                                sortBy));
+                return employeeService.getEmployeesByDepartmentId(
+                                idD, nom, pageable);
+        }
 
-    @Operation(
-            summary = "Create an employee",
-            description = "Creates a new employee in the selected department."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Employee created successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = EmployeeResponse.class)
-                    )
-            )
-    })
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeResponse createEmployee(@PathVariable Long idD, @Valid @RequestBody EmployeeCreateRequest request) {
-        Employee employee = employeeMapper.toEntity(request);
-        return employeeService.createEmployee(idD, employee);
-    }
+        @Operation(summary = "Create an employee", description = "Creates a new employee in the selected department.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "201", description = "Employee created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponse.class)))
+        })
+        @PostMapping
+        @ResponseStatus(HttpStatus.CREATED)
+        public EmployeeResponse createEmployee(@PathVariable Long idD,
+                        @Valid @RequestBody EmployeeCreateRequest request) {
+                Employee employee = employeeMapper.toEntity(request);
+                return employeeService.createEmployee(idD, employee);
+        }
 
-    @Operation(
-            summary = "Get an employee by ID",
-            description = "Returns the employee matching the given ID within the department."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Employee found successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = EmployeeResponse.class)
-                    )
-            )
-    })
-    @GetMapping("/{idE}")
-    @ResponseStatus(HttpStatus.OK)
-    public EmployeeResponse getEmployeeById(@PathVariable Long idD, @PathVariable Long idE) {
-        return employeeService.getEmployeeById(idD, idE);
-    }
+        @Operation(summary = "Get an employee by ID", description = "Returns the employee matching the given ID within the department.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Employee found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponse.class)))
+        })
+        @GetMapping("/{idE}")
+        @ResponseStatus(HttpStatus.OK)
+        public EmployeeResponse getEmployeeById(@PathVariable Long idD, @PathVariable Long idE) {
+                return employeeService.getEmployeeById(idD, idE);
+        }
 
-    @Operation(
-            summary = "Update an employee",
-            description = "Updates the employee information for the given ID inside the department."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Employee updated successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = EmployeeResponse.class)
-                    )
-            )
-    })
-    @PatchMapping("/{idE}")
-    @ResponseStatus(HttpStatus.OK)
-    public EmployeeResponse updateEmployee(@PathVariable Long idD, @PathVariable Long idE, @Valid @RequestBody EmployeeUpdateRequest request) {
+        @Operation(summary = "Update an employee", description = "Updates the employee information for the given ID inside the department.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Employee updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponse.class)))
+        })
+        @PatchMapping("/{idE}")
+        @ResponseStatus(HttpStatus.OK)
+        public EmployeeResponse updateEmployee(@PathVariable Long idD, @PathVariable Long idE,
+                        @Valid @RequestBody EmployeeUpdateRequest request) {
 
-        Employee employee = employeeUpdateMapper.toEntity(request);
-        return employeeService.updateEmployee(idD, idE, employee);
-    }
+                Employee employee = employeeUpdateMapper.toEntity(request);
+                return employeeService.updateEmployee(idD, idE, employee);
+        }
 
-    @Operation(
-            summary = "Delete an employee",
-            description = "Deletes the employee matching the given ID in the department."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Employee deleted successfully")
-    })
-    @DeleteMapping("/{idE}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long idD, @PathVariable Long idE) {
+        @Operation(summary = "Delete an employee", description = "Deletes the employee matching the given ID in the department.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "204", description = "Employee deleted successfully")
+        })
+        @DeleteMapping("/{idE}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public ResponseEntity<Void> deleteEmployee(@PathVariable Long idD, @PathVariable Long idE) {
 
-        employeeService.deleteEmployee(idD, idE);
-        return ResponseEntity.noContent().build();
-    }
+                employeeService.deleteEmployee(idD, idE);
+                return ResponseEntity.noContent().build();
+        }
+
+
 }
