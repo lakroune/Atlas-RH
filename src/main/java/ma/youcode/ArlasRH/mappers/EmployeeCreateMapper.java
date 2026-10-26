@@ -7,7 +7,7 @@ import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.models.Employee;
 
 @Component
-public class EmployeeMapper {
+public class EmployeeCreateMapper {
 
     public EmployeeResponse toResponse(Employee employee) {
 

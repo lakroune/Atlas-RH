@@ -16,7 +16,7 @@ import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
 import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyExistsException;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
 import ma.youcode.ArlasRH.exceptions.ManagerNotFoundException;
-import ma.youcode.ArlasRH.mappers.EmployeeMapper;
+import ma.youcode.ArlasRH.mappers.EmployeeCreateMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.EmployeeService;
@@ -26,16 +26,16 @@ import ma.youcode.ArlasRH.services.EmployeeService;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
+    private final EmployeeCreateMapper employeeCreateMapper;
     private final DepartmentRepository departmentRepository;
 
     public EmployeeServiceImpl(
             EmployeeRepository employeeRepository,
-            EmployeeMapper employeeMapper,
+            EmployeeCreateMapper employeeCreateMapper,
             DepartmentRepository departmentRepository) {
 
         this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
+        this.employeeCreateMapper = employeeCreateMapper;
         this.departmentRepository = departmentRepository;
     }
 
@@ -54,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         employee.setDepartement(department);
         Employee savedEmployee = employeeRepository.save(employee);
-        return employeeMapper.toResponse(savedEmployee);
+        return employeeCreateMapper.toResponse(savedEmployee);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .findByIdAndDepartement_Id(idEmployee, idDepartment)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
 
-        return employeeMapper.toResponse(employee);
+        return employeeCreateMapper.toResponse(employee);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeRepository.findAll()
                 .stream()
-                .map(employeeMapper::toResponse)
+                .map(employeeCreateMapper::toResponse)
                 .toList();
     }
 
@@ -89,7 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeRepository.findByManager_Id(managerId)
                 .stream()
-                .map(employeeMapper::toResponse)
+                .map(employeeCreateMapper::toResponse)
                 .toList();
     }
 
@@ -118,7 +118,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeRepository.findByDepartement_Id(idDepartment)
                 .stream()
-                .map(employeeMapper::toResponse)
+                .map(employeeCreateMapper::toResponse)
                 .toList();
     }
 
@@ -136,7 +136,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         existingEmployee.setPosition(employee.getPosition());
 
         Employee updatedEmployee = employeeRepository.save(existingEmployee);
-        return employeeMapper.toResponse(updatedEmployee);
+        return employeeCreateMapper.toResponse(updatedEmployee);
     }
 
     @Override
@@ -156,14 +156,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                             idD, nom, pageable);
         }
 
-        return employees.map(employeeMapper::toResponse);
+        return employees.map(employeeCreateMapper::toResponse);
     }
 
     @Override
     public List<EmployeeResponse> getEmployeesByManager_Id(Long managerId) {
         return employeeRepository.findByManager_Id(managerId)
                 .stream()
-                .map(employeeMapper::toResponse)
+                .map(employeeCreateMapper::toResponse)
                 .toList();
     }
 
@@ -171,7 +171,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeResponse> getEmployeesByDepartmentAndManagerId(Long idDepartment, Long managerId) {
         return employeeRepository.findByDepartement_IdAndManager_Id(idDepartment, managerId)
                 .stream()
-                .map(employeeMapper::toResponse)
+                .map(employeeCreateMapper::toResponse)
                 .toList();
     }
 

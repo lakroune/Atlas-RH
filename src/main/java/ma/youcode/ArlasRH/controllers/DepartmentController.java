@@ -1,5 +1,6 @@
 package ma.youcode.ArlasRH.controllers;
 
+import lombok.RequiredArgsConstructor;
 import ma.youcode.ArlasRH.dtos.DepartmentResponse;
 import ma.youcode.ArlasRH.mappers.DepartmentMapper;
 import ma.youcode.ArlasRH.models.Department;
@@ -20,14 +21,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/departments")
 @Tag(name = "Departments", description = "Department management APIs")
+@RequiredArgsConstructor
 public class DepartmentController {
     private final DepartmentService departmentService;
     private final DepartmentMapper departmentMapper;
-
-    public DepartmentController(DepartmentService departmentService, DepartmentMapper departmentMapper) {
-        this.departmentService = departmentService;
-        this.departmentMapper = departmentMapper;
-    }
 
     @Operation(
         summary = "Create a department",

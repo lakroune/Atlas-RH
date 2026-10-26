@@ -1,8 +1,6 @@
 
 package ma.youcode.ArlasRH.controllers;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +30,7 @@ import jakarta.validation.Valid;
 import ma.youcode.ArlasRH.dtos.EmployeeCreateRequest;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.dtos.EmployeeUpdateRequest;
-import ma.youcode.ArlasRH.mappers.EmployeeMapper;
+import ma.youcode.ArlasRH.mappers.EmployeeCreateMapper;
 import ma.youcode.ArlasRH.mappers.EmployeeUpdateMapper;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.EmployeeService;
@@ -43,14 +41,14 @@ import ma.youcode.ArlasRH.services.EmployeeService;
 public class EmployeeController {
 
         private final EmployeeService employeeService;
-        private final EmployeeMapper employeeMapper;
+        private final EmployeeCreateMapper employeeCreateMapper;
         private final EmployeeUpdateMapper employeeUpdateMapper;
 
         public EmployeeController(
-                        EmployeeService employeeService,
-                        EmployeeMapper employeeMapper, EmployeeUpdateMapper employeeUpdateMapper) {
+                EmployeeService employeeService,
+                EmployeeCreateMapper employeeCreateMapper, EmployeeUpdateMapper employeeUpdateMapper) {
                 this.employeeService = employeeService;
-                this.employeeMapper = employeeMapper;
+                this.employeeCreateMapper = employeeCreateMapper;
                 this.employeeUpdateMapper = employeeUpdateMapper;
         }
 
@@ -88,7 +86,7 @@ public class EmployeeController {
         @ResponseStatus(HttpStatus.CREATED)
         public EmployeeResponse createEmployee(@PathVariable Long idD,
                         @Valid @RequestBody EmployeeCreateRequest request) {
-                Employee employee = employeeMapper.toEntity(request);
+                Employee employee = employeeCreateMapper.toEntity(request);
                 return employeeService.createEmployee(idD, employee);
         }
 
