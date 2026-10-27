@@ -40,6 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final LeaveRequestRepository leaveRequestRepository;
     private final LeaveRequestCreateMapper leaveRequestCreateMapper;
 
+
     @Override
     public EmployeeResponse createEmployee(
             Long idDepartment, Employee employee) {
@@ -213,7 +214,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId) {
-        return null;
+  
+        Employee manager = employeeRepository.findById(managerId)
+                .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
+
+        if (manager.getRole() != Role.MANAGER) {
+            throw new ManagerNotFoundException("The employee with ID " + managerId + " is not a manager.");
+        }
+
+        LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new LeaveRequestNotFoundException("Leave request not found."));
+
+        if (leaveRequest.getEmployee() == null
+                || leaveRequest.getEmployee().getManager() == null
+                || !leaveRequest.getEmployee().getManager().getId().equals(managerId)) {
+            throw new ManagerNotFoundException("The leave request does not belong to the manager's team.");
+        }
+        
+
+        leaveRequest.setStatus(LeaveStatus.APPROUVEE);
+        LeaveRequest updatedRequest = leaveRequestRepository.save(leaveRequest);
+
+        return leaveRequestCreateMapper.toResponse(updatedRequest);
     }
 
     @Override
