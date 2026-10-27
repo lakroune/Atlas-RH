@@ -39,4 +39,6 @@ public interface LeaveRequestService {
      * @return
      */
     Optional<LeaveRequestRespense> getLeaveRequestById(Long id);
+
+    List<LeaveRequestRespense> getAllLeaveRequest(Long idE);
 }
