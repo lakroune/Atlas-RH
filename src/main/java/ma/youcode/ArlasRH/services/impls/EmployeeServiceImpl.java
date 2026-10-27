@@ -210,4 +210,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<LeaveRequestRespense> getLeaveRequestsByManager(Long managerId) {
         return List.of();
     }
+
+    @Override
+    public List<LeaveRequestRespense> approveLeaveRequest(Long managerId, Long leaveRequestId) {
+        return List.of();
+    }
+
+    @Override
+    public List<LeaveRequestRespense> rejectLeaveRequest(Long managerId, Long leaveRequestId) {
+        return List.of();
+    }
 }

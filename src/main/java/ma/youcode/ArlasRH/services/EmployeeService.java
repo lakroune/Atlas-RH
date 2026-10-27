@@ -40,4 +40,8 @@ public interface EmployeeService {
     void affecterEmployesAuManager(Long managerId, List<String> matricules);
 
     List<LeaveRequestRespense> getLeaveRequestsByManager(Long managerId);
+
+    List<LeaveRequestRespense> approveLeaveRequest(Long managerId, Long leaveRequestId);
+
+    List<LeaveRequestRespense> rejectLeaveRequest(Long managerId, Long leaveRequestId);
 }

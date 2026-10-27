@@ -5,6 +5,7 @@ import java.util.List;
 import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,7 @@ import ma.youcode.ArlasRH.services.EmployeeService;
 public class ManagerController {
 
     private final EmployeeService employeeService;
+    private final PathMatcher pathMatcher;
 
     @Operation(summary = "Get employees by manager ID", description = "Returns the list of employees managed by the specified manager.")
     @ApiResponses(value = {
@@ -64,5 +66,22 @@ public class ManagerController {
     public List<LeaveRequestRespense> getLeaveRequestsByManager(
             @PathVariable Long managerId) {
         return employeeService.getLeaveRequestsByManager(managerId);
+    }
+
+    @PatchMapping("/{managerId}/demands/{leaveRequestId}/approve")
+    @ResponseStatus(HttpStatus.OK)
+    public List<LeaveRequestRespense> approveLeaveRequest(
+            @PathVariable Long managerId,
+            @PathVariable Long leaveRequestId) {
+        return employeeService.approveLeaveRequest(managerId, leaveRequestId);
+    }
+
+    @PatchMapping("/{managerId}/demands/{leaveRequestId}/reject")
+    @ResponseStatus(HttpStatus.OK)
+    public List<LeaveRequestRespense> rejectLeaveRequest(
+            @PathVariable Long managerId,
+            @PathVariable Long leaveRequestId) {
+        return employeeService.rejectLeaveRequest(managerId, leaveRequestId);
+
     }
 }
