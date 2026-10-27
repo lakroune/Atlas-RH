@@ -231,6 +231,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new ManagerNotFoundException("The leave request does not belong to the manager's team.");
         }
         
+        
 
         leaveRequest.setStatus(LeaveStatus.APPROUVEE);
         LeaveRequest updatedRequest = leaveRequestRepository.save(leaveRequest);
