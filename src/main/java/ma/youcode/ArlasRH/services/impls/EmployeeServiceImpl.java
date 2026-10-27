@@ -4,6 +4,7 @@ package ma.youcode.ArlasRH.services.impls;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -203,5 +204,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         employeeRepository.saveAll(employees);
+    }
+
+    @Override
+    public List<LeaveRequestRespense> getLeaveRequestsByManager(Long managerId) {
+        return List.of();
     }
 }

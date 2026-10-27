@@ -3,6 +3,7 @@ package ma.youcode.ArlasRH.services;
 
 import java.util.List;
 
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -37,4 +38,6 @@ public interface EmployeeService {
     List<EmployeeResponse> getEmployeesByDepartmentAndManagerId(Long idDepartment, Long managerId);
 
     void affecterEmployesAuManager(Long managerId, List<String> matricules);
+
+    List<LeaveRequestRespense> getLeaveRequestsByManager(Long managerId);
 }

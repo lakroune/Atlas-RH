@@ -2,6 +2,7 @@ package ma.youcode.ArlasRH.controllers;
 
 import java.util.List;
 
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,5 +52,17 @@ public class ManagerController {
         employeeService.affecterEmployesAuManager(managerId, matricules);
 
         return ResponseEntity.ok("Employés affectés au manager avec succès");
+    }
+
+    @Operation(summary = "Get leaves en tatant requests by manager", description = "Returns all leave requests submitted by employees managed by the specified manager.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Leave requests retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaveRequestRespense.class)))),
+            @ApiResponse(responseCode = "404", description = "Manager not found")
+    })
+    @GetMapping("/{managerId}/demands")
+    @ResponseStatus(HttpStatus.OK)
+    public List<LeaveRequestRespense> getLeaveRequestsByManager(
+            @PathVariable Long managerId) {
+        return employeeService.getLeaveRequestsByManager(managerId);
     }
 }
