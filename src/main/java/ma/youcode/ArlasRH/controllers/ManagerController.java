@@ -79,7 +79,7 @@ public class ManagerController {
 
     @PatchMapping("/{managerId}/demands/{leaveRequestId}/approve")
     @ResponseStatus(HttpStatus.OK)
-    public List<LeaveRequestRespense> approveLeaveRequest(
+    public LeaveRequestRespense approveLeaveRequest(
             @PathVariable Long managerId,
             @PathVariable Long leaveRequestId) {
         return employeeService.approveLeaveRequest(managerId, leaveRequestId);
@@ -93,7 +93,7 @@ public class ManagerController {
 
     @PatchMapping("/{managerId}/demands/{leaveRequestId}/reject")
     @ResponseStatus(HttpStatus.OK)
-    public List<LeaveRequestRespense> rejectLeaveRequest(
+    public LeaveRequestRespense rejectLeaveRequest(
             @PathVariable Long managerId,
             @PathVariable Long leaveRequestId) {
         return employeeService.rejectLeaveRequest(managerId, leaveRequestId);

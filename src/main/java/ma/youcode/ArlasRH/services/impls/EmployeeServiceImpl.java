@@ -4,41 +4,41 @@ package ma.youcode.ArlasRH.services.impls;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
+import ma.youcode.ArlasRH.daos.LeaveRequestRepository;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
 import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyExistsException;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
+import ma.youcode.ArlasRH.exceptions.LeaveRequestNotFoundException;
 import ma.youcode.ArlasRH.exceptions.ManagerNotFoundException;
 import ma.youcode.ArlasRH.mappers.EmployeeCreateMapper;
+import ma.youcode.ArlasRH.mappers.LeaveRequestCreateMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
+import ma.youcode.ArlasRH.models.LeaveRequest;
+import ma.youcode.ArlasRH.models.enums.LeaveStatus;
+import ma.youcode.ArlasRH.models.enums.Role;
 import ma.youcode.ArlasRH.services.EmployeeService;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeCreateMapper employeeCreateMapper;
     private final DepartmentRepository departmentRepository;
-
-    public EmployeeServiceImpl(
-            EmployeeRepository employeeRepository,
-            EmployeeCreateMapper employeeCreateMapper,
-            DepartmentRepository departmentRepository) {
-
-        this.employeeRepository = employeeRepository;
-        this.employeeCreateMapper = employeeCreateMapper;
-        this.departmentRepository = departmentRepository;
-    }
+    private final LeaveRequestRepository leaveRequestRepository;
+    private final LeaveRequestCreateMapper leaveRequestCreateMapper;
 
     @Override
     public EmployeeResponse createEmployee(
@@ -212,12 +212,32 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<LeaveRequestRespense> approveLeaveRequest(Long managerId, Long leaveRequestId) {
-        return List.of();
+    public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId) {
+        return null;
     }
 
     @Override
-    public List<LeaveRequestRespense> rejectLeaveRequest(Long managerId, Long leaveRequestId) {
-        return List.of();
+    public LeaveRequestRespense rejectLeaveRequest(Long managerId, Long leaveRequestId) {
+
+        Employee manager = employeeRepository.findById(managerId)
+                .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
+
+        if (manager.getRole() != Role.MANAGER) {
+            throw new ManagerNotFoundException("The employee with ID " + managerId + " is not a manager.");
+        }
+
+        LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new LeaveRequestNotFoundException("Leave request not found."));
+
+        if (leaveRequest.getEmployee() == null
+                || leaveRequest.getEmployee().getManager() == null
+                || !leaveRequest.getEmployee().getManager().getId().equals(managerId)) {
+            throw new ManagerNotFoundException("The leave request does not belong to the manager's team.");
+        }
+
+        leaveRequest.setStatus(LeaveStatus.REFUSEE);
+        LeaveRequest updatedRequest = leaveRequestRepository.save(leaveRequest);
+
+        return leaveRequestCreateMapper.toResponse(updatedRequest);
     }
 }
