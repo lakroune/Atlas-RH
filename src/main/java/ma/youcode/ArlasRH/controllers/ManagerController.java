@@ -33,6 +33,7 @@ public class ManagerController {
             @ApiResponse(responseCode = "200", description = "Employees retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = EmployeeResponse.class)))),
             @ApiResponse(responseCode = "404", description = "Manager not found")
     })
+
     @GetMapping("/{managerId}/team")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<EmployeeResponse>> getEmployeesByManagerId(
@@ -46,6 +47,7 @@ public class ManagerController {
             @ApiResponse(responseCode = "200", description = "Employees assigned successfully"),
             @ApiResponse(responseCode = "404", description = "Manager or employee not found")
     })
+
     @PostMapping("/{managerId}/employees")
     public ResponseEntity<String> affecterEmployesAuManager(
             @PathVariable Long managerId,
@@ -61,12 +63,19 @@ public class ManagerController {
             @ApiResponse(responseCode = "200", description = "Leave requests retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaveRequestRespense.class)))),
             @ApiResponse(responseCode = "404", description = "Manager not found")
     })
+
     @GetMapping("/{managerId}/demands")
     @ResponseStatus(HttpStatus.OK)
     public List<LeaveRequestRespense> getLeaveRequestsByManager(
             @PathVariable Long managerId) {
         return employeeService.getLeaveRequestsByManager(managerId);
     }
+
+    @Operation(summary = "Approve a leave request", description = "Approves a leave request for an employee managed by the specified manager.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Leave request approved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaveRequestRespense.class)))),
+            @ApiResponse(responseCode = "404", description = "Manager or leave request not found")
+    })
 
     @PatchMapping("/{managerId}/demands/{leaveRequestId}/approve")
     @ResponseStatus(HttpStatus.OK)
@@ -76,12 +85,17 @@ public class ManagerController {
         return employeeService.approveLeaveRequest(managerId, leaveRequestId);
     }
 
+    @Operation(summary = "Reject a leave request", description = "Rejects a leave request for an employee managed by the specified manager.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Leave request rejected successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaveRequestRespense.class)))),
+            @ApiResponse(responseCode = "404", description = "Manager or leave request not found")
+    })
+
     @PatchMapping("/{managerId}/demands/{leaveRequestId}/reject")
     @ResponseStatus(HttpStatus.OK)
     public List<LeaveRequestRespense> rejectLeaveRequest(
             @PathVariable Long managerId,
             @PathVariable Long leaveRequestId) {
         return employeeService.rejectLeaveRequest(managerId, leaveRequestId);
-
     }
 }
