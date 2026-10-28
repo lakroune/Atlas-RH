@@ -40,7 +40,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final LeaveRequestRepository leaveRequestRepository;
     private final LeaveRequestCreateMapper leaveRequestCreateMapper;
 
-
     @Override
     public EmployeeResponse createEmployee(
             Long idDepartment, Employee employee) {
@@ -209,12 +208,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<LeaveRequestRespense> getLeaveRequestsByManager(Long managerId) {
-        return List.of();
+        Employee manager = employeeRepository.findById(managerId)
+                .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
+
+        if (manager.getRole() != Role.MANAGER) {
+            throw new ManagerNotFoundException("The employee with ID " + managerId + " is not a manager.");
+        }
+
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_Manager_Id(managerId);
+
+        return leaveRequests.stream()
+                .map(leaveRequestCreateMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
     public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId) {
-  
+
         Employee manager = employeeRepository.findById(managerId)
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
 
@@ -230,9 +240,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 || !leaveRequest.getEmployee().getManager().getId().equals(managerId)) {
             throw new ManagerNotFoundException("The leave request does not belong to the manager's team.");
         }
-        
-        
-
+        if (leaveRequest.getStatus() != LeaveStatus.EN_ATTENTE) {
+            throw new LeaveRequestNotFoundException("demande already aprouved.");
+        }
         leaveRequest.setStatus(LeaveStatus.APPROUVEE);
         LeaveRequest updatedRequest = leaveRequestRepository.save(leaveRequest);
 

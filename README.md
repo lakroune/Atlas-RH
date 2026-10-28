@@ -67,6 +67,24 @@ Déployez-le sur un serveur Tomcat (ou tout conteneur Servlet) et accédez à :
 http://localhost:8080/atlasrh
 ```
 
+### 2.5. Lancer avec Docker Compose
+
+Docker Compose construit l'image de l'application et démarre PostgreSQL. À la racine du projet :
+
+```bash
+docker compose up --build
+```
+
+L'API est ensuite accessible sur `http://localhost:8080/atlasrh`. Pour arrêter les conteneurs :
+
+```bash
+docker compose down
+```
+
+Les données PostgreSQL restent conservées dans le volume `postgres_data`. Pour remplacer le mot de
+passe local par défaut (`123456`), définissez la variable d'environnement `POSTGRES_PASSWORD`
+avant de lancer Compose.
+
 
 
 ## 3. Architecture en couches
@@ -158,4 +176,3 @@ src/main/java/ma/youcode/ArlasRH/
 | **Config** | `resources/application.properties` | Configuration de l'application (base de données, JPA, Liquibase, serveur). |
 | **Migrations** | `resources/db/changelog/*` | Migration de la base de données avec Liquibase. |
 | **Ressources** | `resources/static`, `resources/templates` | Ressources statiques et vues (Thymeleaf). |
-
