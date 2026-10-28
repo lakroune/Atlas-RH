@@ -88,7 +88,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             LeaveRequestNotFoundException.class,
             LeaveRequestCannotBeCancelledException.class,
-            LeaveRequestAlreadyCancelledException.class
+            LeaveRequestAlreadyCancelledException.class,
+            LeaveRequestAlreadyExistException.class
     })
     public ResponseEntity<Map<String, String>> handleLeaveRequestExceptions(RuntimeException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
@@ -98,6 +99,8 @@ public class GlobalExceptionHandler {
         } else if (e instanceof LeaveRequestCannotBeCancelledException) {
             status = HttpStatus.CONFLICT;
         } else if (e instanceof LeaveRequestAlreadyCancelledException) {
+            status = HttpStatus.CONFLICT;
+        } else if (e instanceof LeaveRequestAlreadyExistException) {
             status = HttpStatus.CONFLICT;
         }
 
