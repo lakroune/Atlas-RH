@@ -7,20 +7,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import ma.youcode.ArlasRH.dtos.LeaveTypeRequest;
 import ma.youcode.ArlasRH.dtos.LeaveTypeResponse;
+import ma.youcode.ArlasRH.mappers.LeaveTypeMapper;
+import ma.youcode.ArlasRH.models.LeaveType;
 import ma.youcode.ArlasRH.services.LeaveTypeService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "leave type", description = "Leave type management APIs")
+@Tag(name = "Leave type", description = "Leave type management APIs")
 public class LeaveTypeController {
     private final LeaveTypeService leaveTypeService;
 
@@ -35,6 +36,20 @@ public class LeaveTypeController {
     }
 
 
+    @Operation(
+            summary = "Create a leave type",
+            description = "Creates a leave type with its name and annual leave allowance."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Leave type created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LeaveTypeResponse.class))),
+            @ApiResponse(responseCode = "400", description = "The request body is invalid")
+    })
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public LeaveTypeResponse createLeaveType(@Valid  @RequestBody LeaveTypeRequest leaveTypeRequest){
+        LeaveType leaveType = LeaveTypeMapper.toEntity( leaveTypeRequest);
+        return  leaveTypeService.createLeaveType(leaveType);
+    }
 
 
 

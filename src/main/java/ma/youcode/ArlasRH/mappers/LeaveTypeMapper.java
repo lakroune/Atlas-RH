@@ -7,7 +7,7 @@ import ma.youcode.ArlasRH.models.LeaveType;
 public class LeaveTypeMapper {
 
 
-    public LeaveType toEntity(LeaveTypeRequest request){
+    public static LeaveType toEntity(LeaveTypeRequest request){
         return  new LeaveType(
                 request.getName(),
                 request.getDaysPerYear()

@@ -20,7 +20,7 @@ public class LeaveTypeServiceImpl  implements LeaveTypeService {
 
 
     @Override
-    public LeaveType createLeaveType(LeaveType leaveType) {
+    public LeaveTypeResponse createLeaveType(LeaveType leaveType) {
         return null;
     }
 

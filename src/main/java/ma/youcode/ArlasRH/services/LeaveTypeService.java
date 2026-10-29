@@ -12,7 +12,7 @@ public interface LeaveTypeService {
      * @param leaveType
      * @return
      */
-    LeaveType createLeaveType(LeaveType leaveType);
+    LeaveTypeResponse createLeaveType(LeaveType leaveType);
 
     /**
      *
