@@ -14,14 +14,12 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class LeaveTypeServiceImpl  implements LeaveTypeService {
+public class LeaveTypeServiceImpl implements LeaveTypeService {
     private final LeaveTypeRepository leaveTypeRepository;
-
-
 
     @Override
     public LeaveTypeResponse createLeaveType(LeaveType leaveType) {
-        return null;
+        return LeaveTypeMapper.toResponse(leaveTypeRepository.save(leaveType));
     }
 
     @Override
@@ -37,8 +35,7 @@ public class LeaveTypeServiceImpl  implements LeaveTypeService {
     @Override
     public List<LeaveTypeResponse> getAllLeaveTypes() {
         return leaveTypeRepository.findAll()
-                .stream().
-                map(LeaveTypeMapper::toResponse)
+                .stream().map(LeaveTypeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
