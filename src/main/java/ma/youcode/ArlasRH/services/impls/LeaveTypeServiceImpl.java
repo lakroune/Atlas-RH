@@ -1,20 +1,23 @@
 package ma.youcode.ArlasRH.services.impls;
 
+import lombok.AllArgsConstructor;
 import ma.youcode.ArlasRH.daos.LeaveTypeRepository;
+import ma.youcode.ArlasRH.dtos.LeaveTypeResponse;
+import ma.youcode.ArlasRH.mappers.LeaveTypeMapper;
 import ma.youcode.ArlasRH.models.LeaveType;
 import ma.youcode.ArlasRH.services.LeaveTypeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class LeaveTypeServiceImpl  implements LeaveTypeService {
     private final LeaveTypeRepository leaveTypeRepository;
 
-    public LeaveTypeServiceImpl(LeaveTypeRepository leaveTypeRepository) {
-        this.leaveTypeRepository = leaveTypeRepository;
-    }
+
 
     @Override
     public LeaveType createLeaveType(LeaveType leaveType) {
@@ -32,8 +35,11 @@ public class LeaveTypeServiceImpl  implements LeaveTypeService {
     }
 
     @Override
-    public List<LeaveType> getAllLeaveTypes() {
-        return List.of();
+    public List<LeaveTypeResponse> getAllLeaveTypes() {
+        return leaveTypeRepository.findAll()
+                .stream().
+                map(LeaveTypeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override

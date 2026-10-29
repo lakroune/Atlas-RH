@@ -1,6 +1,5 @@
 package ma.youcode.ArlasRH.controllers;
 
-import ma.youcode.ArlasRH.models.LeaveRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,5 +1,6 @@
 package ma.youcode.ArlasRH.services;
 
+import ma.youcode.ArlasRH.dtos.LeaveTypeResponse;
 import ma.youcode.ArlasRH.models.LeaveType;
 
 import java.util.List;
@@ -29,9 +30,9 @@ public interface LeaveTypeService {
 
     /**
      *
-     * @return
+     * @return Array
      */
-    List<LeaveType> getAllLeaveTypes();
+    List<LeaveTypeResponse> getAllLeaveTypes();
 
     /**
      *
