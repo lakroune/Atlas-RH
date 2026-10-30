@@ -24,8 +24,8 @@ public class LeaveRequesCreatetRequest {
     @FutureOrPresent(message = "La date de fin doit être aujourd'hui ou dans le futur")
     private LocalDate endDate;
 
-    @NotNull(message = "Le nombre de jours travaillés est obligatoire")
-    private Integer workingDay;
+    // @NotNull(message = "Le nombre de jours travaillés est obligatoire")
+    // private Integer workingDay;
 
     @NotBlank(message = "La raison est obligatoire")
     private String reason;

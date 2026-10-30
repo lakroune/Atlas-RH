@@ -218,7 +218,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new ManagerNotFoundException("The employee with ID " + managerId + " is not a manager.");
         }
 
-        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_Manager_IdAndStatus(managerId, LeaveStatus.EN_ATTENTE);
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_Manager_IdAndStatus(managerId,
+                LeaveStatus.EN_ATTENTE);
 
         return leaveRequests.stream()
                 .map(leaveRequestCreateMapper::toResponse)
@@ -226,7 +227,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId , LeaveRequestAprouveRequest leaveRequestAprouveRequest) {
+    public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId,
+            LeaveRequestAprouveRequest leaveRequestAprouveRequest) {
 
         Employee manager = employeeRepository.findById(managerId)
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
@@ -282,15 +284,43 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<String> getLeaveBalance() {
-        return List.of();
-    }
+    public List<String> getLeaveBalance(Long idD, Long idE) {
 
+        if (!departmentRepository.existsById(idD)) {
+            throw new DepartmentNotFoundException("Department not found.");
+        }
+
+        if (!employeeRepository.existsById(idE)) {
+            throw new EmployeeNotFoundException("Employee not found.");
+        }
+
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
+        double totalLeaveDays = leaveRequests.stream()
+                .filter(lr -> lr.getStatus() == LeaveStatus.APPROUVEE)
+                .mapToDouble(LeaveRequest::getWorkingDay)
+                .sum();
+
+        double totalleaveDaysAnuel = leaveRequests.stream()
+                .filter(lr -> lr.getStatus() == LeaveStatus.APPROUVEE
+                        && lr.getLeaveType().getName().equalsIgnoreCase("Congé annuel"))
+                .filter(l -> !l.getStartDate().isAfter(LocalDate.now().minusYears(1)))
+                .mapToDouble(LeaveRequest::getWorkingDay)
+                .sum();
+
+        double totalleaveDaysMaladie = leaveRequests.stream()
+                .filter(lr -> lr.getStatus() == LeaveStatus.APPROUVEE
+                        && lr.getLeaveType().getName().equalsIgnoreCase("Congé maladie"))
+                .filter(l -> !l.getStartDate().isAfter(LocalDate.now().minusYears(1)))
+                .mapToDouble(LeaveRequest::getWorkingDay)
+                .sum();
+
+        return List.of(String.valueOf(totalLeaveDays), String.valueOf(totalleaveDaysAnuel),
+                String.valueOf(totalleaveDaysMaladie));
+    }
 
     @Override
-    public List<String> getLeaveBalanceAncien() {
+    public List<String> getLeaveBalanceAncien(Long idD, Long idE) {
         return List.of();
     }
-
 
 }

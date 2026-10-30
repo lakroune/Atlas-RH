@@ -47,7 +47,7 @@ public interface EmployeeService {
 
     LeaveRequestRespense rejectLeaveRequest(Long managerId, Long leaveRequestId);
 
-    List<String> getLeaveBalance();
+    List<String> getLeaveBalance( Long idD, Long idE);
 
-    List<String> getLeaveBalanceAncien();
+    List<String> getLeaveBalanceAncien( Long idD, Long idE);
 }

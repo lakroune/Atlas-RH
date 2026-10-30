@@ -134,9 +134,11 @@ public class EmployeeController {
         })
         @GetMapping("/{idE}/solde")
         @ResponseStatus(HttpStatus.OK)
-        public ResponseEntity<List<String>> getEmployeeLeaveBalance(@PathVariable Long idD, @PathVariable Long idE) {
+        public ResponseEntity<List<String>> getEmployeeLeaveBalance(
+                        @PathVariable Long idD,
+                        @PathVariable Long idE) {
 
-                return ResponseEntity.ok(employeeService.getLeaveBalance());
+                return ResponseEntity.ok(employeeService.getLeaveBalance(idD, idE));
 
         }
 
@@ -147,9 +149,10 @@ public class EmployeeController {
         })
         @GetMapping("/{idE}/ancien")
         @ResponseStatus(HttpStatus.OK)
-        public ResponseEntity<List<String>> getEmployeeLeaveBalanceAncien(@PathVariable Long idD,
+        public ResponseEntity<List<String>> getEmployeeLeaveBalanceAncien(
+                        @PathVariable Long idD,
                         @PathVariable Long idE) {
-                return ResponseEntity.ok(employeeService.getLeaveBalanceAncien());
+                return ResponseEntity.ok(employeeService.getLeaveBalanceAncien (idD, idE));
 
         }
 

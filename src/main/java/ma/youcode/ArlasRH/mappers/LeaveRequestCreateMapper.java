@@ -19,7 +19,7 @@ public class LeaveRequestCreateMapper {
         LeaveRequest leaveRequest = new LeaveRequest();
         leaveRequest.setStartDate(request.getStartDate());
         leaveRequest.setEndDate(request.getEndDate());
-        leaveRequest.setWorkingDay(request.getWorkingDay());
+        // leaveRequest.setWorkingDay(request.getWorkingDay());
         leaveRequest.setReason(request.getReason());
         leaveRequest.setStatus(LeaveStatus.EN_ATTENTE);
 
