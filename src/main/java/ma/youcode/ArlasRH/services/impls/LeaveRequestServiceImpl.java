@@ -37,6 +37,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         if (leaveRequestRepository.existsByEmployee_IdAndStatus(employeeId, LeaveStatus.EN_ATTENTE)) {
             throw new LeaveRequestAlreadyExistException("already has leave request");
         }
+        
 
         LeaveType leaveType = leaveTypeRepository.findById(leaveRequest.getLeaveTypeId())
                 .orElseThrow(() -> new LeaveTypeNotFoundException("Leave type not found."));
