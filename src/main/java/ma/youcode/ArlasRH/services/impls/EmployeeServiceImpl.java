@@ -217,7 +217,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new ManagerNotFoundException("The employee with ID " + managerId + " is not a manager.");
         }
 
-        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_Manager_Id(managerId);
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_Manager_IdAndStatus(managerId, LeaveStatus.EN_ATTENTE);
 
         return leaveRequests.stream()
                 .map(leaveRequestCreateMapper::toResponse)
