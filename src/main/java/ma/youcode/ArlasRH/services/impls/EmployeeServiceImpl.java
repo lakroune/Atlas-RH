@@ -2,6 +2,7 @@
 package ma.youcode.ArlasRH.services.impls;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -320,7 +321,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<String> getLeaveBalanceAncien(Long idD, Long idE) {
-        return List.of();
+        if (!departmentRepository.existsById(idD)) {
+            throw new DepartmentNotFoundException("Department not found.");
+        }
+
+        Employee employee = employeeRepository.findById(idE)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
+
+        Period anciennete = Period.between(employee.getDateDeRejoindre(), LocalDate.now());
+
+        return List.of(
+                String.valueOf(anciennete.getYears()),
+                String.valueOf(anciennete.getMonths()),
+                String.valueOf(anciennete.getDays()));
     }
 
 }
