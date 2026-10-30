@@ -35,26 +35,38 @@ public class LeaveTypeController {
         return leaveTypeService.getAllLeaveTypes();
     }
 
-
-    @Operation(
-            summary = "Create a leave type",
-            description = "Creates a leave type with its name and annual leave allowance."
-    )
+    @Operation(summary = "Create a leave type", description = "Creates a leave type with its name and annual leave allowance.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Leave type created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LeaveTypeResponse.class))),
             @ApiResponse(responseCode = "400", description = "The request body is invalid")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LeaveTypeResponse createLeaveType(@Valid  @RequestBody LeaveTypeRequest leaveTypeRequest){
-        LeaveType leaveType = LeaveTypeMapper.toEntity( leaveTypeRequest);
-        return  leaveTypeService.createLeaveType(leaveType);
+    public LeaveTypeResponse createLeaveType(@Valid @RequestBody LeaveTypeRequest leaveTypeRequest) {
+        LeaveType leaveType = LeaveTypeMapper.toEntity(leaveTypeRequest);
+        return leaveTypeService.createLeaveType(leaveType);
     }
 
+    @Operation(summary = "Get a leave type by ID", description = "Returns the leave type matching the given identifier.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Leave type retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LeaveTypeResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Leave type not found")
+    })
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public LeaveTypeResponse getLeaveTypeById(@PathVariable Long id) {
+        return leaveTypeService.getLeaveTypeById(id);
+    }
 
-    
-
-
-    
+    @Operation(summary = "Delete a leave type", description = "Deletes the leave type matching the given identifier.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Leave type deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Leave type not found")
+    })
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLeaveType(@PathVariable Long id) {
+        leaveTypeService.deleteLeaveType(id);
+    }
 
 }

@@ -3,6 +3,7 @@ package ma.youcode.ArlasRH.services.impls;
 import lombok.AllArgsConstructor;
 import ma.youcode.ArlasRH.daos.LeaveTypeRepository;
 import ma.youcode.ArlasRH.dtos.LeaveTypeResponse;
+import ma.youcode.ArlasRH.exceptions.LeaveTypeNotFoundException;
 import ma.youcode.ArlasRH.mappers.LeaveTypeMapper;
 import ma.youcode.ArlasRH.models.LeaveType;
 import ma.youcode.ArlasRH.services.LeaveTypeService;
@@ -29,7 +30,10 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 
     @Override
     public void deleteLeaveType(Long id) {
-
+        if (!leaveTypeRepository.existsById(id)) {
+            throw new LeaveTypeNotFoundException("Leave type not found with id: " + id);
+        }
+        leaveTypeRepository.deleteById(id);
     }
 
     @Override
@@ -40,7 +44,13 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
     }
 
     @Override
-    public Optional<LeaveType> getLeaveTypeById(Long id) {
-        return Optional.empty();
+    public LeaveTypeResponse getLeaveTypeById(Long id) {
+        Optional<LeaveType> leaveTypeOptional = leaveTypeRepository.findById(id);
+        if (leaveTypeOptional.isPresent()) {
+            LeaveType leaveType = leaveTypeOptional.get();
+            return LeaveTypeMapper.toResponse(leaveType);
+        } else {
+            throw new LeaveTypeNotFoundException("Leave type not found with id: " + id);
+        }
     }
 }

@@ -39,6 +39,6 @@ public interface LeaveTypeService {
      * @param id
      * @return
      */
-    Optional<LeaveType> getLeaveTypeById(Long id);
+    LeaveTypeResponse getLeaveTypeById(Long id);
 
 }
