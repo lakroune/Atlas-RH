@@ -3,6 +3,7 @@ package ma.youcode.ArlasRH.services;
 
 import java.util.List;
 
+import ma.youcode.ArlasRH.dtos.LeaveRequestAprouveRequest;
 import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,7 @@ public interface EmployeeService {
 
     List<LeaveRequestRespense> getLeaveRequestsByManager(Long managerId);
 
-    LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId);
+    LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId, LeaveRequestAprouveRequest leaveRequestAprouveRequest);
 
     LeaveRequestRespense rejectLeaveRequest(Long managerId, Long leaveRequestId);
 }

@@ -1,9 +1,11 @@
 
 package ma.youcode.ArlasRH.services.impls;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ma.youcode.ArlasRH.dtos.LeaveRequestAprouveRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -223,7 +225,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId) {
+    public LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId , LeaveRequestAprouveRequest leaveRequestAprouveRequest) {
 
         Employee manager = employeeRepository.findById(managerId)
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found."));
@@ -243,6 +245,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (leaveRequest.getStatus() != LeaveStatus.EN_ATTENTE) {
             throw new LeaveRequestNotFoundException("demande already aprouved.");
         }
+        Employee employee = leaveRequest.getEmployee();
+
+        leaveRequest.setManagerComment(leaveRequestAprouveRequest.getManagerComment());
+        leaveRequest.setDecisionDate(LocalDate.now());
         leaveRequest.setStatus(LeaveStatus.APPROUVEE);
         LeaveRequest updatedRequest = leaveRequestRepository.save(leaveRequest);
 
