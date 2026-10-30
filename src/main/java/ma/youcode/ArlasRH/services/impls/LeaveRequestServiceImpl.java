@@ -37,7 +37,6 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         if (leaveRequestRepository.existsByEmployee_IdAndStatus(employeeId, LeaveStatus.EN_ATTENTE)) {
             throw new LeaveRequestAlreadyExistException("already has leave request");
         }
-        
 
         LeaveType leaveType = leaveTypeRepository.findById(leaveRequest.getLeaveTypeId())
                 .orElseThrow(() -> new LeaveTypeNotFoundException("Leave type not found."));
@@ -49,6 +48,8 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         if (entity.getStatus() == null) {
             entity.setStatus(LeaveStatus.EN_ATTENTE);
         }
+        double days = (double) (entity.getEndDate().toEpochDay() - entity.getStartDate().toEpochDay()) + 1;
+        entity.setWorkingDay((int) days);
         LeaveRequest saved = leaveRequestRepository.save(entity);
         return leaveRequestCreateMapper.toResponse(saved);
     }
@@ -65,10 +66,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         }
         LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
                 .orElseThrow(() -> new LeaveRequestNotFoundException("Leave request not found."));
-        if(leaveRequest.getStatus() == LeaveStatus.APPROUVEE || leaveRequest.getStatus() == LeaveStatus.REFUSEE) {
+        if (leaveRequest.getStatus() == LeaveStatus.APPROUVEE || leaveRequest.getStatus() == LeaveStatus.REFUSEE) {
             throw new LeaveRequestCannotBeCancelledException("Cannot cancel an approved or refused leave request.");
         }
-        if( leaveRequest.getStatus() == LeaveStatus.ANNULEE) {
+        if (leaveRequest.getStatus() == LeaveStatus.ANNULEE) {
             throw new LeaveRequestAlreadyCancelledException("Leave request is already cancelled.");
         }
         leaveRequest.setStatus(LeaveStatus.ANNULEE);

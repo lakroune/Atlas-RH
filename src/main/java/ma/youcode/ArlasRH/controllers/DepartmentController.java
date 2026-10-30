@@ -24,21 +24,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentController {
     private final DepartmentService departmentService;
-    private final DepartmentMapper departmentMapper;
 
-    @Operation(
-        summary = "Create a department",
-        description = "Creates a new department with the provided information."
-    )
+    @Operation(summary = "Get all departments", description = "Returns the list of all registered departments.")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Department created successfully",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = DepartmentResponse.class)
-            )
-        )
+            @ApiResponse(responseCode = "200", description = "Departments retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DepartmentResponse.class))))
+    })
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<DepartmentResponse> getAllDepartments() {
+        return departmentService.getAllDepartements();
+    }
+
+    @Operation(summary = "Get a department by ID", description = "Returns the department matching the given identifier.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Department found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DepartmentResponse.class)))
+    })
+    @GetMapping("/{id}")
+    public DepartmentResponse getDepartmentByID(@PathVariable Long id) {
+        return departmentService.getDepartementById(id);
+    }
+
+    @Operation(summary = "Create a department", description = "Creates a new department with the provided information.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Department created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DepartmentResponse.class)))
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -46,37 +55,21 @@ public class DepartmentController {
         return departmentService.createDepartement(department);
     }
 
-   @Operation(
-    summary = "Get all departments",
-    description = "Retrieve the list of all departments."
-    )
+    @Operation(summary = "Update a department", description = "Updates an existing department by its identifier.")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Departments retrieved successfully",
-            content = @Content(
-                mediaType = "application/json",
-                array = @ArraySchema(
-                    schema = @Schema(implementation = DepartmentResponse.class)
-                )
-            )
-        )
+            @ApiResponse(responseCode = "200", description = "Department updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DepartmentResponse.class)))
     })
-    @GetMapping
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<DepartmentResponse> getAllDepartments() {
-        return departmentService.getAllDepartements();
+    public DepartmentResponse updateDepartment(
+            @PathVariable Long id,
+            @RequestBody Department department) {
+        return departmentService.updateDepartement(id, department);
     }
 
-    @Operation(
-        summary = "Delete a department",
-        description = "Deletes a department by its identifier."
-    )
+    @Operation(summary = "Delete a department", description = "Deletes a department by its identifier.")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Department deleted successfully"
-        )
+            @ApiResponse(responseCode = "204", description = "Department deleted successfully")
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -87,48 +80,6 @@ public class DepartmentController {
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-
     }
 
-    @Operation(
-        summary = "Update a department",
-        description = "Updates an existing department by its identifier."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Department updated successfully",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = DepartmentResponse.class)
-            )
-        )
-    })
-    @PatchMapping
-    @RequestMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public DepartmentResponse updateDepartment(@PathVariable Long id, @RequestBody Department department) {
-        return departmentService.updateDepartement(id, department);
-    }
-
-    @Operation(
-        summary = "Get a department by ID",
-        description = "Returns the department matching the given identifier."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Department found successfully",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = DepartmentResponse.class)
-            )
-        )
-    })
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public DepartmentResponse getDepartmentByID(@PathVariable Long id) {
-        return departmentService.getDepartementById(id);
-
-    }
 }

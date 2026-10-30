@@ -288,6 +288,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return leaveRequestCreateMapper.toResponse(updatedRequest);
     }
 
+
+
+
+
+
     @Override
     public List<String> getLeaveBalance(Long idD, Long idE) {
 
@@ -295,13 +300,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new DepartmentNotFoundException("Department not found.");
         }
 
-        if (!employeeRepository.existsById(idE)) {
-            throw new EmployeeNotFoundException("Employee not found.");
+        Employee employee = employeeRepository.findById(idE)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
+
+        if (!employee.getDepartement().getId().equals(idD)) {
+            throw new EmployeeNotFoundException(
+                    "Employee does not belong to this department."
+            );
         }
 
-        List<LeaveRequest> leaveRequests = leaveRequestRepository
-                .findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
-        LocalDate periodStart = LocalDate.now().minusYears(1);
+        int currentYear = LocalDate.now().getYear();
+
+        List<LeaveRequest> leaveRequests =
+                leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
         List<String> leaveBalances = new ArrayList<>();
 
         for (LeaveType leaveType : leaveTypeRepository.findAll()) {
@@ -309,20 +320,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             for (LeaveRequest leaveRequest : leaveRequests) {
                 boolean isApproved = leaveRequest.getStatus() == LeaveStatus.APPROUVEE;
-                boolean hasSameType = leaveRequest.getLeaveType().getId().equals(leaveType.getId());
-                boolean isInPeriod = !leaveRequest.getStartDate().isBefore(periodStart);
+                boolean hasSameType = leaveRequest.getLeaveType().getId()
+                        .equals(leaveType.getId());
+                boolean isSameYear = leaveRequest.getStartDate().getYear() == currentYear;
 
-                if (isApproved && hasSameType && isInPeriod) {
+                if (isApproved && hasSameType && isSameYear) {
                     usedDays += leaveRequest.getWorkingDay();
                 }
             }
 
-            int remainingDays = Math.max(0, leaveType.getDaysPerYear() - usedDays);
-            leaveBalances.add(leaveType.getName() + ": " + remainingDays);
+            int remainingDays = Math.max(
+                    0,
+                    leaveType.getDaysPerYear() - usedDays
+            );
+
+            leaveBalances.add(
+                    leaveType.getName() + ": " + remainingDays + " jours restants"
+            );
         }
 
         return leaveBalances;
     }
+
+
 
     @Override
     public List<String> getLeaveBalanceAncien(Long idD, Long idE) {
