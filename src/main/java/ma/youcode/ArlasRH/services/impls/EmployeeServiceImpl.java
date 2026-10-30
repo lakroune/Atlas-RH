@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import ma.youcode.ArlasRH.dtos.LeaveRequestAprouveRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -289,11 +288,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return leaveRequestCreateMapper.toResponse(updatedRequest);
     }
 
-
-
-
-
-
     @Override
     public List<String> getLeaveBalance(Long idD, Long idE) {
 
@@ -303,47 +297,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee = employeeRepository.findById(idE)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found."));
-
         if (!employee.getDepartement().getId().equals(idD)) {
             throw new EmployeeNotFoundException(
-                    "Employee does not belong to this department."
-            );
+                    "Employee does not belong to this department.");
         }
-
-        int currentYear = LocalDate.now().getYear();
-
-        List<LeaveRequest> leaveRequests =
-                leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
-        List<String> leaveBalances = new ArrayList<>();
-
-        for (LeaveType leaveType : leaveTypeRepository.findAll()) {
+        LocalDate today = LocalDate.now();
+        LocalDate oneYearAgo = today.minusYears(1);
+        List<LeaveRequest> requests = leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
+        List<String> balances = new ArrayList<>();
+        for (LeaveType type : leaveTypeRepository.findAll()) {
             int usedDays = 0;
+            for (LeaveRequest request : requests) {
+                if (request.getStatus() == LeaveStatus.APPROUVEE
+                        && request.getLeaveType().getId().equals(type.getId())
+                        && !request.getStartDate().isBefore(oneYearAgo)
+                        && !request.getStartDate().isAfter(today)) {
 
-            for (LeaveRequest leaveRequest : leaveRequests) {
-                boolean isApproved = leaveRequest.getStatus() == LeaveStatus.APPROUVEE;
-                boolean hasSameType = leaveRequest.getLeaveType().getId()
-                        .equals(leaveType.getId());
-                boolean isSameYear = leaveRequest.getStartDate().getYear() == currentYear;
-
-                if (isApproved && hasSameType && isSameYear) {
-                    usedDays += leaveRequest.getWorkingDay();
+                    usedDays += request.getWorkingDay();
                 }
             }
-
-            int remainingDays = Math.max(
-                    0,
-                    leaveType.getDaysPerYear() - usedDays
-            );
-
-            leaveBalances.add(
-                    leaveType.getName() + ": " + remainingDays + " jours restants"
-            );
+            int remainingDays = Math.max(0, type.getDaysPerYear() - usedDays);
+            balances.add(type.getName() + ": " + remainingDays + " jours restants");
         }
-
-        return leaveBalances;
+        return balances;
     }
-
-
 
     @Override
     public HashMap<String, Integer> getLeaveBalanceAncien(Long idD, Long idE) {
