@@ -51,6 +51,6 @@ public class LeaveRequestController {
     @PatchMapping("/{idE}/demandes/{idLeave}/cancel")
     @ResponseStatus(HttpStatus.OK)
     public LeaveRequestRespense cancelLeaveRequest(@PathVariable Long idE, @PathVariable Long idLeave) {
-        return leaveRequestService.cancelLeaveRequest(idE, idLeave);
+        return leaveRequestService.cancelLeaveRequest(idLeave,idE);
     }
 }
