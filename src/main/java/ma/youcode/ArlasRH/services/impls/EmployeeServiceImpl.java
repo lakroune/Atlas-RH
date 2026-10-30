@@ -3,6 +3,7 @@ package ma.youcode.ArlasRH.services.impls;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import ma.youcode.ArlasRH.daos.DepartmentRepository;
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.daos.LeaveRequestRepository;
+import ma.youcode.ArlasRH.daos.LeaveTypeRepository;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
 import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
@@ -29,6 +31,7 @@ import ma.youcode.ArlasRH.mappers.LeaveRequestCreateMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.models.LeaveRequest;
+import ma.youcode.ArlasRH.models.LeaveType;
 import ma.youcode.ArlasRH.models.enums.LeaveStatus;
 import ma.youcode.ArlasRH.models.enums.Role;
 import ma.youcode.ArlasRH.services.EmployeeService;
@@ -42,6 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeCreateMapper employeeCreateMapper;
     private final DepartmentRepository departmentRepository;
     private final LeaveRequestRepository leaveRequestRepository;
+    private final LeaveTypeRepository leaveTypeRepository;
     private final LeaveRequestCreateMapper leaveRequestCreateMapper;
 
     @Override
@@ -295,28 +299,29 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeNotFoundException("Employee not found.");
         }
 
-        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
-        double totalLeaveDays = leaveRequests.stream()
-                .filter(lr -> lr.getStatus() == LeaveStatus.APPROUVEE)
-                .mapToDouble(LeaveRequest::getWorkingDay)
-                .sum();
+        List<LeaveRequest> leaveRequests = leaveRequestRepository
+                .findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
+        LocalDate periodStart = LocalDate.now().minusYears(1);
+        List<String> leaveBalances = new ArrayList<>();
 
-        double totalleaveDaysAnuel = leaveRequests.stream()
-                .filter(lr -> lr.getStatus() == LeaveStatus.APPROUVEE
-                        && lr.getLeaveType().getName().equalsIgnoreCase("Congé annuel"))
-                .filter(l -> !l.getStartDate().isAfter(LocalDate.now().minusYears(1)))
-                .mapToDouble(LeaveRequest::getWorkingDay)
-                .sum();
+        for (LeaveType leaveType : leaveTypeRepository.findAll()) {
+            int usedDays = 0;
 
-        double totalleaveDaysMaladie = leaveRequests.stream()
-                .filter(lr -> lr.getStatus() == LeaveStatus.APPROUVEE
-                        && lr.getLeaveType().getName().equalsIgnoreCase("Congé maladie"))
-                .filter(l -> !l.getStartDate().isAfter(LocalDate.now().minusYears(1)))
-                .mapToDouble(LeaveRequest::getWorkingDay)
-                .sum();
+            for (LeaveRequest leaveRequest : leaveRequests) {
+                boolean isApproved = leaveRequest.getStatus() == LeaveStatus.APPROUVEE;
+                boolean hasSameType = leaveRequest.getLeaveType().getId().equals(leaveType.getId());
+                boolean isInPeriod = !leaveRequest.getStartDate().isBefore(periodStart);
 
-        return List.of(String.valueOf(totalLeaveDays), String.valueOf(totalleaveDaysAnuel),
-                String.valueOf(totalleaveDaysMaladie));
+                if (isApproved && hasSameType && isInPeriod) {
+                    usedDays += leaveRequest.getWorkingDay();
+                }
+            }
+
+            int remainingDays = Math.max(0, leaveType.getDaysPerYear() - usedDays);
+            leaveBalances.add(leaveType.getName() + ": " + remainingDays);
+        }
+
+        return leaveBalances;
     }
 
     @Override
