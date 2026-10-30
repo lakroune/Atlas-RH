@@ -35,6 +35,8 @@ import ma.youcode.ArlasRH.mappers.EmployeeUpdateMapper;
 import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.EmployeeService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/departments/{idD}/employes")
 @Tag(name = "Employees", description = "Employee management APIs")
@@ -45,8 +47,8 @@ public class EmployeeController {
         private final EmployeeUpdateMapper employeeUpdateMapper;
 
         public EmployeeController(
-                EmployeeService employeeService,
-                EmployeeCreateMapper employeeCreateMapper, EmployeeUpdateMapper employeeUpdateMapper) {
+                        EmployeeService employeeService,
+                        EmployeeCreateMapper employeeCreateMapper, EmployeeUpdateMapper employeeUpdateMapper) {
                 this.employeeService = employeeService;
                 this.employeeCreateMapper = employeeCreateMapper;
                 this.employeeUpdateMapper = employeeUpdateMapper;
@@ -125,5 +127,30 @@ public class EmployeeController {
                 return ResponseEntity.noContent().build();
         }
 
+        @Operation(summary = "Get an employee's leave balance", description = "Returns the leave balance of the employee within the department.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Employee leave balance retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))),
+                        @ApiResponse(responseCode = "404", description = "Employee or department not found")
+        })
+        @GetMapping("/{idE}/solde")
+        @ResponseStatus(HttpStatus.OK)
+        public ResponseEntity<List<String>> getEmployeeLeaveBalance(@PathVariable Long idD, @PathVariable Long idE) {
+
+                return ResponseEntity.ok(employeeService.getLeaveBalance());
+
+        }
+
+        @Operation(summary = "Get an employee's seniority leave balance", description = "Returns the seniority-based leave balance of the employee within the department.")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Employee seniority leave balance retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))),
+                        @ApiResponse(responseCode = "404", description = "Employee or department not found")
+        })
+        @GetMapping("/{idE}/ancien")
+        @ResponseStatus(HttpStatus.OK)
+        public ResponseEntity<List<String>> getEmployeeLeaveBalanceAncien(@PathVariable Long idD,
+                        @PathVariable Long idE) {
+                return ResponseEntity.ok(employeeService.getLeaveBalanceAncien());
+
+        }
 
 }

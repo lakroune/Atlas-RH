@@ -7,6 +7,8 @@ import lombok.Setter;
 import ma.youcode.ArlasRH.models.enums.Role;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,4 +24,6 @@ public class EmployeeResponse {
     private LocalDate dateDeRejoindre;
     private Role role;
     private Long departmentId;
+
+    
 }

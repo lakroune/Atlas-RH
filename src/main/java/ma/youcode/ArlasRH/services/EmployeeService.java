@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.models.Employee;
+import org.springframework.http.ResponseEntity;
 
 public interface EmployeeService {
 
@@ -45,4 +46,8 @@ public interface EmployeeService {
     LeaveRequestRespense approveLeaveRequest(Long managerId, Long leaveRequestId, LeaveRequestAprouveRequest leaveRequestAprouveRequest);
 
     LeaveRequestRespense rejectLeaveRequest(Long managerId, Long leaveRequestId);
+
+    List<String> getLeaveBalance();
+
+    List<String> getLeaveBalanceAncien();
 }
