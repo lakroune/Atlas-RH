@@ -4,6 +4,7 @@ package ma.youcode.ArlasRH.services.impls;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -345,7 +346,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public List<String> getLeaveBalanceAncien(Long idD, Long idE) {
+    public HashMap<String, Integer> getLeaveBalanceAncien(Long idD, Long idE) {
         if (!departmentRepository.existsById(idD)) {
             throw new DepartmentNotFoundException("Department not found.");
         }
@@ -355,10 +356,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Period anciennete = Period.between(employee.getDateDeRejoindre(), LocalDate.now());
 
-        return List.of(
-                String.valueOf(anciennete.getYears()),
-                String.valueOf(anciennete.getMonths()),
-                String.valueOf(anciennete.getDays()));
+        HashMap<String, Integer> ancienneteDetails = new HashMap<>();
+        ancienneteDetails.put("years", anciennete.getYears());
+        ancienneteDetails.put("months", anciennete.getMonths());
+        ancienneteDetails.put("days", anciennete.getDays());
+
+        return ancienneteDetails;
     }
 
 }

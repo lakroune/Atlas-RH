@@ -1,6 +1,7 @@
 
 package ma.youcode.ArlasRH.services;
 
+import java.util.HashMap;
 import java.util.List;
 
 import ma.youcode.ArlasRH.dtos.LeaveRequestAprouveRequest;
@@ -49,5 +50,5 @@ public interface EmployeeService {
 
     List<String> getLeaveBalance( Long idD, Long idE);
 
-    List<String> getLeaveBalanceAncien( Long idD, Long idE);
+    HashMap<String, Integer> getLeaveBalanceAncien(Long idD, Long idE);
 }

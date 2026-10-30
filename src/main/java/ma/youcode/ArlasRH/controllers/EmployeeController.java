@@ -36,6 +36,7 @@ import ma.youcode.ArlasRH.models.Employee;
 import ma.youcode.ArlasRH.services.EmployeeService;
 
 import java.util.List;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/v1/departments/{idD}/employes")
@@ -149,10 +150,10 @@ public class EmployeeController {
         })
         @GetMapping("/{idE}/ancien")
         @ResponseStatus(HttpStatus.OK)
-        public ResponseEntity<List<String>> getEmployeeLeaveBalanceAncien(
+        public ResponseEntity<HashMap<String, Integer>> getEmployeeLeaveBalanceAncien(
                         @PathVariable Long idD,
                         @PathVariable Long idE) {
-                return ResponseEntity.ok(employeeService.getLeaveBalanceAncien (idD, idE));
+                return ResponseEntity.ok(employeeService.getLeaveBalanceAncien(idD, idE));
 
         }
 
