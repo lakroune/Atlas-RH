@@ -3,3 +3,232 @@ databaseChangeLog:
       id: 0-initial
       author: system
       changes: []
+
+  - changeSet:
+      id: 1-create-schema
+      author: system
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: HALT
+        - not:
+            - tableExists:
+                tableName: departements
+      changes:
+        - createTable:
+            tableName: departements
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: employes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: matricule
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: position
+                  type: VARCHAR(255)
+              - column:
+                  name: date_de_rejoindre
+                  type: DATE
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+              - column:
+                  name: department_id
+                  type: BIGINT
+              - column:
+                  name: manager_id
+                  type: BIGINT
+
+        - addForeignKeyConstraint:
+            baseTableName: employes
+            baseColumnNames: department_id
+            referencedTableName: departements
+            referencedColumnNames: id
+            constraintName: fk_employes_department
+
+        - addForeignKeyConstraint:
+            baseTableName: employes
+            baseColumnNames: manager_id
+            referencedTableName: employes
+            referencedColumnNames: id
+            constraintName: fk_employes_manager
+
+        - createTable:
+            tableName: leave_types
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: days_per_year
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: contracts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: DATE
+              - column:
+                  name: gross_salary
+                  type: DECIMAL(19, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: employee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: contracts
+            baseColumnNames: employee_id
+            referencedTableName: employes
+            referencedColumnNames: id
+            constraintName: fk_contracts_employee
+
+        - createTable:
+            tableName: leave_requests
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: working_day
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reason
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: manager_comment
+                  type: VARCHAR(255)
+              - column:
+                  name: decision_date
+                  type: DATE
+              - column:
+                  name: employee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: leave_type_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: leave_requests
+            baseColumnNames: employee_id
+            referencedTableName: employes
+            referencedColumnNames: id
+            constraintName: fk_leave_requests_employee
+
+        - addForeignKeyConstraint:
+            baseTableName: leave_requests
+            baseColumnNames: leave_type_id
+            referencedTableName: leave_types
+            referencedColumnNames: id
+            constraintName: fk_leave_requests_leave_type
