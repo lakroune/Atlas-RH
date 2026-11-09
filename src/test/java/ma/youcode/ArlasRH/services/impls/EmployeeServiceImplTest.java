@@ -23,6 +23,7 @@ import ma.youcode.ArlasRH.daos.LeaveTypeRepository;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
 import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyExistsException;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
+import ma.youcode.ArlasRH.exceptions.ManagerNotFoundException;
 import ma.youcode.ArlasRH.mappers.EmployeeCreateMapper;
 import ma.youcode.ArlasRH.mappers.LeaveRequestCreateMapper;
 import ma.youcode.ArlasRH.models.Department;
@@ -169,7 +170,7 @@ public class EmployeeServiceImplTest {
                                 .thenReturn(Optional.empty());
 
                 assertThrows(
-                                EmployeeNotFoundException.class,
+                                ManagerNotFoundException.class,
                                 () -> employeeService.affecterEmployesAuManager(managerId, matricules));
 
         }
