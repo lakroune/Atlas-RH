@@ -31,6 +31,7 @@ class EmployeeRepositoryTest {
     private Department engineering;
     private Department humanResources;
 
+    // Prépare un jeu de données commun pour chaque scénario du repository.
     @BeforeEach
     void setUp() {
         engineering = departmentRepository.save(new Department("Engineering", "Product engineering"));
