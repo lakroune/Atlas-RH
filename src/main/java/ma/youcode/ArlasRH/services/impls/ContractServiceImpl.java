@@ -13,6 +13,7 @@ import ma.youcode.ArlasRH.dtos.ContractResponse;
 import ma.youcode.ArlasRH.exceptions.ContractAlreadyTerminatedException;
 import ma.youcode.ArlasRH.exceptions.ContractNotFoundException;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
+import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyHasActiveContractException;
 import ma.youcode.ArlasRH.mappers.ContractMapper;
 import ma.youcode.ArlasRH.models.Contract;
 import ma.youcode.ArlasRH.models.Employee;
@@ -32,6 +33,12 @@ public class ContractServiceImpl implements ContractService {
     public ContractResponse createContract(Long employeeId, Contract contract) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found."));
+
+        if (contractRepository.existsByEmployee_IdAndIsActiveTrue(employeeId)) {
+            throw new EmployeeAlreadyHasActiveContractException(
+                    "Employee already has an active contract."
+            );
+        }
 
         contract.setEmployee(employee);
         Contract savedContract = contractRepository.save(contract);

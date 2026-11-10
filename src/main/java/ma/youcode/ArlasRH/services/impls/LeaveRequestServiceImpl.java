@@ -2,6 +2,8 @@ package ma.youcode.ArlasRH.services.impls;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         LeaveType leaveType = leaveTypeRepository.findById(leaveRequest.getLeaveTypeId())
                 .orElseThrow(() -> new LeaveTypeNotFoundException("Leave type not found."));
 
+        if (leaveRequest.getEndDate().isBefore(leaveRequest.getStartDate())) {
+            throw new IllegalArgumentException("End date must not be before start date.");
+        }
+
         LeaveRequest entity = leaveRequestCreateMapper.toEntity(leaveRequest);
         entity.setEmployee(employee);
         entity.setLeaveType(leaveType);
@@ -48,8 +54,16 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         if (entity.getStatus() == null) {
             entity.setStatus(LeaveStatus.EN_ATTENTE);
         }
-        double days = (double) (entity.getEndDate().toEpochDay() - entity.getStartDate().toEpochDay()) + 1;
-        entity.setWorkingDay((int) days);
+        int workingDays = 0;
+        LocalDate currentDate = entity.getStartDate();
+        while (!currentDate.isAfter(entity.getEndDate())) {
+            DayOfWeek day = currentDate.getDayOfWeek();
+            if (day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY) {
+                workingDays++;
+            }
+            currentDate = currentDate.plusDays(1);
+        }
+        entity.setWorkingDay(workingDays);
         LeaveRequest saved = leaveRequestRepository.save(entity);
         return leaveRequestCreateMapper.toResponse(saved);
     }
