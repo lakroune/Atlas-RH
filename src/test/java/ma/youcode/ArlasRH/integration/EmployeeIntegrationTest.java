@@ -32,6 +32,10 @@ import ma.youcode.ArlasRH.models.enums.LeaveStatus;
 import ma.youcode.ArlasRH.models.enums.Role;
 
 @SpringBootTest(properties = {
+        "spring.datasource.url=jdbc:h2:mem:arlasrh-integration-test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
+        "spring.datasource.driver-class-name=org.h2.Driver",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
         "spring.liquibase.enabled=false",
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.docker.compose.enabled=false"
