@@ -1,6 +1,8 @@
 package ma.youcode.ArlasRH.services.impls;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Description;
 import ma.youcode.ArlasRH.daos.ContractRepository;
 import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.dtos.ContractResponse;
+import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyHasActiveContractException;
 import ma.youcode.ArlasRH.mappers.ContractMapper;
 import ma.youcode.ArlasRH.models.Contract;
 import ma.youcode.ArlasRH.models.Employee;
@@ -63,6 +66,26 @@ public class ContractServiceImplTest {
         assertSame(expectedResponse, actualResponse);
         verify(contractRepository).save(contract);
         verify(contractMapper).toResponse(contract);
+    }
+
+    @Test
+    @Description("Refuser un deuxième contrat actif pour le même employé")
+    void testContratActifDejaExistant() {
+        Long employeeId = 1L;
+        Employee employee = new Employee();
+        Contract contract = new Contract();
+
+        when(employeeRepository.findById(employeeId))
+                .thenReturn(Optional.of(employee));
+        when(contractRepository.existsByEmployee_IdAndIsActiveTrue(employeeId))
+                .thenReturn(true);
+
+        assertThrows(
+                EmployeeAlreadyHasActiveContractException.class,
+                () -> contractService.createContract(employeeId, contract)
+        );
+
+        verify(contractRepository, never()).save(contract);
     }
 
 

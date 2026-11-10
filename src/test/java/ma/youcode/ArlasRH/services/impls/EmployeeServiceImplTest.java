@@ -2,10 +2,13 @@ package ma.youcode.ArlasRH.services.impls;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ import ma.youcode.ArlasRH.daos.EmployeeRepository;
 import ma.youcode.ArlasRH.daos.LeaveRequestRepository;
 import ma.youcode.ArlasRH.daos.LeaveTypeRepository;
 import ma.youcode.ArlasRH.dtos.EmployeeResponse;
+import ma.youcode.ArlasRH.dtos.LeaveRequestAprouveRequest;
+import ma.youcode.ArlasRH.dtos.LeaveRequestRespense;
+import ma.youcode.ArlasRH.exceptions.DepartmentNotFoundException;
 import ma.youcode.ArlasRH.exceptions.EmployeeAlreadyExistsException;
 import ma.youcode.ArlasRH.exceptions.EmployeeNotFoundException;
 import ma.youcode.ArlasRH.exceptions.ManagerNotFoundException;
@@ -28,6 +34,9 @@ import ma.youcode.ArlasRH.mappers.EmployeeCreateMapper;
 import ma.youcode.ArlasRH.mappers.LeaveRequestCreateMapper;
 import ma.youcode.ArlasRH.models.Department;
 import ma.youcode.ArlasRH.models.Employee;
+import ma.youcode.ArlasRH.models.LeaveRequest;
+import ma.youcode.ArlasRH.models.LeaveType;
+import ma.youcode.ArlasRH.models.enums.LeaveStatus;
 import ma.youcode.ArlasRH.models.enums.Role;
 
 @ExtendWith(MockitoExtension.class)
@@ -173,6 +182,115 @@ public class EmployeeServiceImplTest {
                                 ManagerNotFoundException.class,
                                 () -> employeeService.affecterEmployesAuManager(managerId, matricules));
 
+        }
+
+        @Test
+        @Description("Affecter des employés à un manager")
+        void testAffecterEmployesAuManagerAvecSucces() {
+                Long managerId = 1L;
+                Employee manager = new Employee();
+                manager.setId(managerId);
+                manager.setRole(Role.MANAGER);
+                Employee employee = new Employee();
+                employee.setRole(Role.EMPLOYE);
+                List<String> matricules = List.of("EMP-001");
+
+                when(employeeRepository.findById(managerId)).thenReturn(Optional.of(manager));
+                when(employeeRepository.findAllByMatriculeIn(matricules))
+                                .thenReturn(List.of(employee));
+
+                employeeService.affecterEmployesAuManager(managerId, matricules);
+
+                assertSame(manager, employee.getManager());
+                verify(employeeRepository).saveAll(List.of(employee));
+        }
+
+        @Test
+        @Description("Calculer le solde annuel restant")
+        void testSoldeCongesAvecSucces() {
+                Long departmentId = 1L;
+                Long employeeId = 2L;
+                Department department = new Department("IT", "Information Technology");
+                department.setId(departmentId);
+                Employee employee = new Employee();
+                employee.setDepartement(department);
+                LeaveType leaveType = new LeaveType("Congé annuel", 25);
+                leaveType.setId(10L);
+                LeaveRequest usedLeave = new LeaveRequest();
+                usedLeave.setStatus(LeaveStatus.APPROUVEE);
+                usedLeave.setLeaveType(leaveType);
+                usedLeave.setStartDate(LocalDate.now().minusMonths(1));
+                usedLeave.setWorkingDay(5);
+
+                when(departmentRepository.existsById(departmentId)).thenReturn(true);
+                when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+                when(leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(employeeId, departmentId))
+                                .thenReturn(List.of(usedLeave));
+                when(leaveTypeRepository.findAll()).thenReturn(List.of(leaveType));
+
+                List<String> balances = employeeService.getLeaveBalance(departmentId, employeeId);
+
+                assertEquals(List.of("Congé annuel: 20 jours restants"), balances);
+        }
+
+        @Test
+        @Description("Refuser le calcul du solde pour un département inexistant")
+        void testSoldeCongesDepartementInexistant() {
+                when(departmentRepository.existsById(99L)).thenReturn(false);
+
+                assertThrows(
+                                DepartmentNotFoundException.class,
+                                () -> employeeService.getLeaveBalance(99L, 2L)
+                );
+        }
+
+        @Test
+        @Description("Approuver une demande de congé")
+        void testApprouverDemandeAvecSucces() {
+                Long managerId = 1L;
+                Long requestId = 10L;
+                Employee manager = new Employee();
+                manager.setId(managerId);
+                manager.setRole(Role.MANAGER);
+                Employee employee = new Employee();
+                employee.setManager(manager);
+                LeaveRequest leaveRequest = new LeaveRequest();
+                leaveRequest.setEmployee(employee);
+                leaveRequest.setStatus(LeaveStatus.EN_ATTENTE);
+                LeaveRequestAprouveRequest decision =
+                                new LeaveRequestAprouveRequest("Demande validée");
+                LeaveRequestRespense expectedResponse = new LeaveRequestRespense();
+
+                when(employeeRepository.findById(managerId)).thenReturn(Optional.of(manager));
+                when(leaveRequestRepository.findById(requestId)).thenReturn(Optional.of(leaveRequest));
+                when(leaveRequestRepository.save(leaveRequest)).thenReturn(leaveRequest);
+                when(leaveRequestCreateMapper.toResponse(leaveRequest)).thenReturn(expectedResponse);
+
+                LeaveRequestRespense actual =
+                                employeeService.approveLeaveRequest(managerId, requestId, decision);
+
+                assertSame(expectedResponse, actual);
+                assertEquals(LeaveStatus.APPROUVEE, leaveRequest.getStatus());
+                assertEquals("Demande validée", leaveRequest.getManagerComment());
+                assertNotNull(leaveRequest.getDecisionDate());
+                verify(leaveRequestRepository).save(leaveRequest);
+        }
+
+        @Test
+        @Description("Refuser une décision prise par un non-manager")
+        void testApprouverDemandeParNonManager() {
+                Employee employee = new Employee();
+                employee.setRole(Role.EMPLOYE);
+                when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+
+                assertThrows(
+                                ManagerNotFoundException.class,
+                                () -> employeeService.approveLeaveRequest(
+                                                1L,
+                                                10L,
+                                                new LeaveRequestAprouveRequest("OK")
+                                )
+                );
         }
 
 }
