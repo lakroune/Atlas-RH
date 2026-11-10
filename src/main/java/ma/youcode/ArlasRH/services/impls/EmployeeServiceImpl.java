@@ -302,6 +302,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     "Employee does not belong to this department.");
         }
         LocalDate today = LocalDate.now();
+
         LocalDate oneYearAgo = today.minusYears(1);
         List<LeaveRequest> requests = leaveRequestRepository.findByEmployee_IdAndEmployee_Departement_Id(idE, idD);
         List<String> balances = new ArrayList<>();
