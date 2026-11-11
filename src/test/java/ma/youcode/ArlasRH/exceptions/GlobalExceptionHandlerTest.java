@@ -1,4 +1,4 @@
-wpackage ma.youcode.ArlasRH.exceptions;
+package ma.youcode.ArlasRH.exceptions;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
